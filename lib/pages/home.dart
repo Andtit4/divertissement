@@ -111,9 +111,9 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(25)),
                 child: Row(children: [
-                  const TiImage(
+                   TiImage(
                       url:
-                          'https://images.unsplash.com/photo-1599508704512-2f19efd1e35f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cXVlc3Rpb258ZW58MHx8MHx8fDA%3D'),
+                          'https://cdn-icons-png.flaticon.com/512/4752/4752630.png'),
                   SizedBox(
                     width: screenWidth * .5,
                     child: const Text(

@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:divertissement/partials/loading.dart';
 import 'package:divertissement/utils/constants.dart';
 import 'package:flukit/flukit.dart';
@@ -19,6 +19,8 @@ class _QuizzState extends State<Quizz> {
   Color borderColor = Colors.transparent;
   Color colorResponse = Colors.red;
   bool pressed = false;
+  PageController controller = PageController();
+  int currentPage = 1;
 
   Future<void> fetchCinemaData() async {
     final response = await http.get(Uri.parse(widget.link));
@@ -48,6 +50,16 @@ class _QuizzState extends State<Quizz> {
             SizedBox(
               height: screenHeight * .04,
             ),
+            FluButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                backgroundColor: Colors.transparent,
+                child: FluIcon(
+                  FluIcons.closeCircle,
+                  color: Colors.white,
+                  style: FluIconStyles.bulk,
+                )),
             SizedBox(
               width: screenWidth,
               height: screenHeight * .7,
@@ -66,9 +78,13 @@ class _QuizzState extends State<Quizz> {
                       ),
                     );
                   } else {
-                    return ListView.builder(
+                    return PageView.builder(
+                        controller: controller,
                         scrollDirection: Axis.horizontal,
                         physics: NeverScrollableScrollPhysics(),
+                        onPageChanged: (page) {
+                          currentPage == page;
+                        },
                         itemCount: questions?.length ?? 0,
                         itemBuilder: (context, index) {
                           return Center(
@@ -125,8 +141,6 @@ class _QuizzState extends State<Quizz> {
                                     children: [
                                       FluButton(
                                         onPressed: () {
-                                      
-
                                           if (questions?[index]
                                                   ['correct_answer'] ==
                                               'True') {
@@ -135,13 +149,18 @@ class _QuizzState extends State<Quizz> {
                                               content: Text('Bonne Réponse !'),
                                               backgroundColor: Colors.green,
                                             ));
+                                            controller.nextPage(
+                                                duration: Duration(seconds: 4),
+                                                curve: Curves.bounceIn);
                                           } else {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
-                                              content: Text(
-                                                  'Mauvaise réponse'),
+                                              content: Text('Mauvaise réponse'),
                                               backgroundColor: Colors.red,
                                             ));
+                                            controller.nextPage(
+                                                duration: Duration(seconds: 4),
+                                                curve: Curves.bounceIn);
                                           }
 
                                           // if (questions?[index]
@@ -174,25 +193,19 @@ class _QuizzState extends State<Quizz> {
                                               content: Text('Bonne Réponse !'),
                                               backgroundColor: Colors.green,
                                             ));
+                                            controller.nextPage(
+                                                duration: Duration(seconds: 4),
+                                                curve: Curves.bounceIn);
                                           } else {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
-                                              content: Text(
-                                                  'Mauvaise réponse'),
+                                              content: Text('Mauvaise réponse'),
                                               backgroundColor: Colors.red,
                                             ));
+                                            controller.nextPage(
+                                                duration: Duration(seconds: 4),
+                                                curve: Curves.easeIn);
                                           }
-                                          // if (questions?[index]
-                                          //         ['correct_answer'] ==
-                                          //     'False') {
-                                          //   setState(() {
-                                          //     borderColor == Colors.green;
-                                          //   });
-                                          // } else {
-                                          //   setState(() {
-                                          //     borderColor == Colors.red;
-                                          //   });
-                                          // }
                                         },
                                         backgroundColor: Colors.red,
                                         child: Text(
@@ -212,7 +225,17 @@ class _QuizzState extends State<Quizz> {
                   }
                 },
               ),
-            )
+            ),
+            Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: new LinearProgressBar(
+                  maxSteps: 10,
+                  progressType: LinearProgressBar
+                      .progressTypeLinear, // Use Linear progress
+                  currentStep: 1,
+                  progressColor: Colors.white,
+                  backgroundColor: Colors.grey,
+                )),
           ],
         ),
       ),
