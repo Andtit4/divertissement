@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:divertissement/pages/quizz.dart';
 import 'package:divertissement/partials/image.dart';
 import 'package:divertissement/partials/loading.dart';
 import 'package:divertissement/services/getCategories.dart';
 import 'package:divertissement/utils/constants.dart';
 import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -125,12 +127,22 @@ class _HomePageState extends State<HomePage> {
                 ]),
               ),
               const SizedBox(
-                height: 10,
+                height: 20,
               ),
-              const Text(
-                'Categories',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Categories',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w700),
+                  ),
+                  FluIcon(
+                    FluIcons.arrowRight,
+                    style: FluIconStyles.bulk,
+                    color: Colors.white,
+                  )
+                ],
               ),
               const SizedBox(
                 height: 10,
@@ -138,39 +150,61 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 width: screenWidth,
                 height: screenHeight * .5,
-                child: ListView.builder(
-                  itemCount: categories?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return FluButton(
-                      onPressed: () {
-                        
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        height: screenHeight * .08,
-                        margin: EdgeInsets.only(bottom: 10),
-                        decoration: BoxDecoration(
-                            color: btnColor,
-                            borderRadius: BorderRadius.all(Radius.circular(15))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              categories?[index]['name'] ?? '',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700),
+                child: FutureBuilder(
+                  future: fetchCinemaData(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: TiLoading(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('An error occued ${snapshot.error}'),
+                      );
+                    } else {
+                      return ListView.builder(
+                        itemCount: categories?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return FluButton(
+                            onPressed: () {
+                              Get.to(
+                                  () => Quizz(
+                                      link:
+                                          "https://opentdb.com/api.php?amount=10&category=${categories?[index]['id']}&type=boolean"),
+                                  transition: Transition.rightToLeft,
+                                  duration: Duration(seconds: 2));
+                            },
+                            backgroundColor: Colors.transparent,
+                            child: Container(
+                              width: double.infinity,
+                              height: screenHeight * .08,
+                              margin: EdgeInsets.only(bottom: 10),
+                              decoration: BoxDecoration(
+                                  color: btnColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    categories?[index]['name'] ?? '',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  FluIcon(
+                                    FluIcons.arrowRight,
+                                    style: FluIconStyles.bulk,
+                                    color: Colors.white,
+                                  )
+                                ],
+                              ),
                             ),
-                            FluIcon(
-                              FluIcons.arrowRight,
-                              style: FluIconStyles.bulk,
-                              color: Colors.white,
-                            )
-                          ],
-                        ),
-                      ),
-                    );
+                          );
+                        },
+                      );
+                    }
                   },
                 ),
               )
