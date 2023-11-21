@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:divertissement/pages/home.dart';
 import 'package:divertissement/pages/register.dart';
 import 'package:divertissement/partials/loading.dart';
 import 'package:divertissement/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,15 +16,30 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  redirect() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (prefs.getString('pseudo') != null) {
+      Timer(const Duration(seconds: 4), () {
+        Get.offAll(() => const HomePage(),
+            transition: Transition.leftToRightWithFade,
+            duration: const Duration(seconds: 1));
+      });
+    } else {
+      Timer(const Duration(seconds: 4), () {
+        Get.offAll(() => const RegisterPage(),
+            transition: Transition.leftToRightWithFade,
+            duration: const Duration(seconds: 1));
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 4), () {
-      Get.offAll(() => const RegisterPage(),
-          transition: Transition.leftToRightWithFade,
-          duration: const Duration(seconds: 1));
-    });
+    redirect();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,10 +56,14 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 10,),
-         const TiLoading(),
+          const SizedBox(
+            height: 10,
+          ),
+          const TiLoading(),
           // Spacer(),
-          SizedBox(height: screenHeight * .06,)
+          SizedBox(
+            height: screenHeight * .06,
+          )
         ],
       ),
     );

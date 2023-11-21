@@ -1,13 +1,18 @@
 import 'package:divertissement/screens/splaschscreen.dart';
+import 'package:divertissement/services/getCategories.dart';
 import 'package:divertissement/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Appelle la fonction pour obtenir les données de cinéma
+  Map<String, dynamic> cinemaData = await fetchCinemaData();
+
+  // Extrait la liste des catégories
+  List<dynamic> categories = cinemaData['trivia_categories'];
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -44,4 +49,3 @@ class _MyHomePageState extends State<MyHomePage> {
     return SplashScreen();
   }
 }
-

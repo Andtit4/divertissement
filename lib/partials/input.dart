@@ -49,9 +49,7 @@ class TiInput extends StatelessWidget {
           keyboardType: keyboardType,
           controller: inputController,
           style: TextStyle(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white
-                  : Colors.black),
+              color: Colors.white),
           // controller: _username,
 
           onChanged: ((value) {
@@ -65,9 +63,8 @@ class TiInput extends StatelessWidget {
             hintText: hintText,
             // contentPadding: EdgeInsets.only(bottom: 2, left: 20),
             hintStyle: TextStyle(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.white
-                    : Colors.black),
+              fontSize: 12,
+                color: hintColor),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
                 borderSide: BorderSide(width: .15)),
