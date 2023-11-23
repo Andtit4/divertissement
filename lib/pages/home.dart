@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: screenHeight * .03,
+                height: screenHeight(context) * .03,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Container(
                 width: double.infinity,
-                height: screenHeight * .25,
+                height: screenHeight(context) * .25,
                 padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                     color: Colors.black,
@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                       url:
                           'https://cdn-icons-png.flaticon.com/512/4752/4752630.png'),
                   SizedBox(
-                    width: screenWidth * .5,
+                    width: screenWidth(context) * .5,
                     child: const Text(
                       'Play & Win\n Lorem ipsum dolor emet iset astdrea dkyes',
                       style: TextStyle(
@@ -161,8 +161,8 @@ class _HomePageState extends State<HomePage> {
                 height: 10,
               ),
               SizedBox(
-                width: screenWidth,
-                height: screenHeight * .5,
+                width: screenWidth(context),
+                height: screenHeight(context) * .5,
                 child: FutureBuilder(
                   future: fetchCinemaData(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                             backgroundColor: Colors.transparent,
                             child: Container(
                               width: double.infinity,
-                              height: screenHeight * .08,
+                              height: screenHeight(context) * .08,
                               margin: EdgeInsets.only(bottom: 10),
                               decoration: BoxDecoration(
                                   color: btnColor,

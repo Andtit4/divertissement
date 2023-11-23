@@ -29,7 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: screenHeight * .06,
+                height: screenHeight(context) * .06,
               ),
               Text(
                 'Please register\nbefore continue',
@@ -39,11 +39,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     fontWeight: FontWeight.w700),
               ),
               SizedBox(
-                height: screenHeight * .04,
+                height: screenHeight(context) * .04,
               ),
               Container(
                 width: double.infinity,
-                height: screenHeight * .58,
+                height: screenHeight(context) * .58,
                 padding: EdgeInsets.all(15),
                 decoration: BoxDecoration(
                     color: Color.fromARGB(255, 22, 48, 79),
@@ -57,7 +57,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     TiInput(
                       color: primaryColor,
                       readonly: false,
-                      width: screenWidth,
+                      width: screenWidth(context),
                       inputController: pseudoController,
                       hintText: 'Entrer votre pseudo',
                       hintColor: Colors.white,
@@ -68,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     TiInput(
                       color: primaryColor,
                       readonly: false,
-                      width: screenWidth,
+                      width: screenWidth(context),
                       hintText: 'Entrer votre nom',
                       inputController: nomController,
                       hintColor: Colors.white,
@@ -79,7 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     TiInput(
                       color: primaryColor,
                       readonly: false,
-                      width: screenWidth,
+                      width: screenWidth(context),
                       hintText: 'Entrer votre prénom',
                       inputController: prenomController,
                       hintColor: Colors.white,
@@ -118,8 +118,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           }
                         },
                         child: Container(
-                          width: screenWidth,
-                          height: screenHeight * .1,
+                          width: screenWidth(context),
+                          height: screenHeight(context) * .1,
                           decoration: BoxDecoration(
                               color: btnColor,
                               borderRadius: BorderRadius.circular(25)),

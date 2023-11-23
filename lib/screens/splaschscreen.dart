@@ -62,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
           const TiLoading(),
           // Spacer(),
           SizedBox(
-            height: screenHeight * .06,
+            height: screenHeight(context) * .06,
           )
         ],
       ),

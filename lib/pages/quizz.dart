@@ -48,7 +48,7 @@ class _QuizzState extends State<Quizz> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: screenHeight * .04,
+              height: screenHeight(context) * .04,
             ),
             FluButton(
                 onPressed: () {
@@ -61,8 +61,8 @@ class _QuizzState extends State<Quizz> {
                   style: FluIconStyles.bulk,
                 )),
             SizedBox(
-              width: screenWidth,
-              height: screenHeight * .7,
+              width: screenWidth(context),
+              height: screenHeight(context) * .7,
               child: FutureBuilder(
                 future: fetchCinemaData(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -89,8 +89,8 @@ class _QuizzState extends State<Quizz> {
                         itemBuilder: (context, index) {
                           return Center(
                             child: Container(
-                              width: screenWidth * .9,
-                              height: screenHeight * .7,
+                              width: screenWidth(context) * .9,
+                              height: screenHeight(context) * .7,
                               margin: EdgeInsets.all(20),
                               padding: EdgeInsets.all(20),
                               decoration: BoxDecoration(
@@ -130,7 +130,7 @@ class _QuizzState extends State<Quizz> {
                                   pressed == true
                                       ? Container(
                                           width: double.infinity,
-                                          height: screenHeight * .08,
+                                          height: screenHeight(context) * .08,
                                           decoration: BoxDecoration(
                                               color: colorResponse),
                                         )
