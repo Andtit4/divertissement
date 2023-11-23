@@ -4,6 +4,7 @@ import 'package:divertissement/pages/quizz.dart';
 import 'package:divertissement/partials/image.dart';
 import 'package:divertissement/partials/loading.dart';
 import 'package:divertissement/services/getCategories.dart';
+import 'package:divertissement/services/sound.dart';
 import 'package:divertissement/utils/constants.dart';
 import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     getInfos();
     fetchCinemaData();
+    jouerSon();
   }
 
   @override
@@ -111,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(25)),
                 child: Row(children: [
-                   TiImage(
+                  TiImage(
                       url:
                           'https://cdn-icons-png.flaticon.com/512/4752/4752630.png'),
                   SizedBox(
