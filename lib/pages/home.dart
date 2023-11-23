@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:divertissement/pages/quizz.dart';
 import 'package:divertissement/partials/image.dart';
 import 'package:divertissement/partials/loading.dart';
@@ -100,6 +101,16 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
+                  // FluButton.icon(
+                  //   FluIcons.musicCircle,
+                  //   onPressed: () {
+                  //     print("objec");
+                  //     final player = AudioPlayer();
+                  //     player.pause();
+                  //     // stopAudio();
+                  //   },
+                  //   size: 50,
+                  // )
                 ],
               ),
               const SizedBox(

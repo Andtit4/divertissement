@@ -23,7 +23,7 @@ class _QuizzState extends State<Quizz> {
   int currentPage = 1;
 
   Future<void> fetchCinemaData() async {
-    final response = await http.get(Uri.parse(widget.link));
+    final response = await http.post(Uri.parse(widget.link));
 
     if (response.statusCode == 200) {
       Map<String, dynamic> cinemaData = json.decode(response.body);
@@ -73,7 +73,7 @@ class _QuizzState extends State<Quizz> {
                   } else if (snapshot.hasError) {
                     return Center(
                       child: Text(
-                        'An error occured ${snapshot.error}',
+                        'Oups ${snapshot.error}',
                         style: TextStyle(color: Colors.white),
                       ),
                     );
