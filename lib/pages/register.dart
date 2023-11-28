@@ -1,4 +1,5 @@
 import 'package:divertissement/pages/home.dart';
+import 'package:divertissement/partials/bottom_nav_bar.dart';
 import 'package:divertissement/partials/input.dart';
 import 'package:divertissement/services/local.dart';
 import 'package:divertissement/utils/constants.dart';
@@ -112,7 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 prenomController.text);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Bienvenu')));
-                            Get.offAll(() => const HomePage(),
+                            Get.offAll(() =>  BottomNavBar(),
                                 transition: Transition.leftToRight,
                                 duration: const Duration(seconds: 3));
                           }

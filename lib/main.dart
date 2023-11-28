@@ -6,10 +6,7 @@ import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Appelle la fonction pour obtenir les données de cinéma
   Map<String, dynamic> cinemaData = await fetchCinemaData();
-
-  // Extrait la liste des catégories
   List<dynamic> categories = cinemaData['trivia_categories'];
   runApp(const MyApp());
 }
@@ -22,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'MyZik',
+      title: 'Divertissement',
       theme: ThemeData(
         textTheme: defaultTextTheme,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

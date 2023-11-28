@@ -3,7 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
  jouerSon() {
   final player = AudioPlayer();
   const sonPath = 'playing.mp3';
-  player.play(AssetSource(sonPath));
+  // player.play(AssetSource(sonPath));
 
   // ignore: unrelated_type_equality_checks
   if (PlayerState.completed == true) {

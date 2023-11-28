@@ -116,115 +116,235 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 10,
               ),
-              Container(
-                width: double.infinity,
-                height: screenHeight(context) * .25,
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(25)),
-                child: Row(children: [
-                  TiImage(
-                      url:
-                          'https://cdn-icons-png.flaticon.com/512/4752/4752630.png'),
-                  SizedBox(
-                    width: screenWidth(context) * .5,
-                    child: const Text(
-                      'Play & Win\n Lorem ipsum dolor emet iset astdrea dkyes',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Color.fromARGB(95, 255, 255, 255),
-                      ),
-                    ),
-                  )
-                ]),
-              ),
+              // Container(
+              //   width: double.infinity,
+              //   height: screenHeight(context) * .25,
+              //   padding: const EdgeInsets.all(15),
+              //   decoration: BoxDecoration(
+              //       color: Colors.black,
+              //       borderRadius: BorderRadius.circular(25)),
+              //   child: Row(children: [
+              //     SizedBox(
+              //       width: screenWidth(context) * .5,
+              //       child: const Text(
+              //         'Play & Win\n Lorem ipsum dolor emet iset astdrea dkyes',
+              //         style: TextStyle(
+              //           fontSize: 10,
+              //           color: Color.fromARGB(95, 255, 255, 255),
+              //         ),
+              //       ),
+              //     ),
+              //     FluImage(
+
+              //             'https://cdn-icons-png.flaticon.com/512/4752/4752630.png'),
+              //   ]),
+              // ),
               const SizedBox(
                 height: 20,
               ),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Categories',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w700),
-                  ),
-                  FluIcon(
-                    FluIcons.arrowRight,
-                    style: FluIconStyles.bulk,
-                    color: Colors.white,
-                  )
-                ],
-              ),
+              // const Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Text(
+              //       'Categories',
+              //       style: TextStyle(
+              //           color: Colors.white, fontWeight: FontWeight.w700),
+              //     ),
+              //     FluIcon(
+              //       FluIcons.arrowRight,
+              //       style: FluIconStyles.bulk,
+              //       color: Colors.white,
+              //     )
+              //   ],
+              // ),
               const SizedBox(
                 height: 10,
               ),
-              SizedBox(
-                width: screenWidth(context),
-                height: screenHeight(context) * .5,
-                child: FutureBuilder(
-                  future: fetchCinemaData(),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: TiLoading(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Text('An error occued ${snapshot.error}'),
-                      );
-                    } else {
-                      return ListView.builder(
-                        itemCount: categories?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return FluButton(
-                            onPressed: () {
-                              Get.to(
-                                  () => Quizz(
-                                      link:
-                                          "https://opentdb.com/api.php?amount=10&category=${categories?[index]['id']}&type=boolean"),
-                                  transition: Transition.rightToLeft,
-                                  duration: Duration(seconds: 2));
-                            },
-                            backgroundColor: Colors.transparent,
-                            child: Container(
-                              width: double.infinity,
-                              height: screenHeight(context) * .08,
-                              margin: EdgeInsets.only(bottom: 10),
-                              decoration: BoxDecoration(
-                                  color: btnColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15))),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    categories?[index]['name'] ?? '',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                  FluIcon(
-                                    FluIcons.arrowRight,
-                                    style: FluIconStyles.bulk,
-                                    color: Colors.white,
-                                  )
-                                ],
-                              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(
+                          () => Quizz(
+                              link:
+                                  "https://opentdb.com/api.php?amount=10&category=11&type=boolean"),
+                          transition: Transition.rightToLeft,
+                          duration: Duration(seconds: 2));
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: screenHeight(context) * .2,
+                      margin: EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                          color: btnColor,
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      child: Center(
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: screenWidth(context) * .2,
                             ),
-                          );
-                        },
-                      );
-                    }
-                  },
-                ),
+                            Padding(
+                              padding: const EdgeInsets.all(35.0),
+                              child: FluImage(
+                                  'https://archive.org/download/cinema-hd-logo_202103/cinema%20hd%20logo.png'),
+                            ),
+                            Text(
+                              'CINEMA',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(
+                          () => Quizz(
+                              link:
+                                  "https://opentdb.com/api.php?amount=10&category=12&type=boolean"),
+                          transition: Transition.rightToLeft,
+                          duration: Duration(seconds: 2));
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: screenHeight(context) * .2,
+                      margin: EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                          color: btnColor,
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      child: Center(
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: screenWidth(context) * .2,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(35.0),
+                              child: FluImage(
+                                  'https://cdn.icon-icons.com/icons2/2201/PNG/512/apple_music_logo_square_icon_134020.png'),
+                            ),
+                            Text(
+                              'MUSIQUE',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(
+                          () => Quizz(
+                              link:
+                                  "https://opentdb.com/api.php?amount=10&category=21&type=boolean"),
+                          transition: Transition.rightToLeft,
+                          duration: Duration(seconds: 2));
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: screenHeight(context) * .2,
+                      margin: EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                          color: btnColor,
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      child: Center(
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: screenWidth(context) * .2,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(35.0),
+                              child: FluImage(
+                                  'https://static.vecteezy.com/system/resources/previews/013/923/534/non_2x/sports-black-car-logo-png.png'),
+                            ),
+                            Text(
+                              'SPORT',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               )
+              // SizedBox(
+              //   width: screenWidth(context),
+              //   height: screenHeight(context) * .5,
+              //   child: FutureBuilder(
+              //     future: fetchCinemaData(),
+              //     builder: (BuildContext context, AsyncSnapshot snapshot) {
+              //       if (snapshot.connectionState == ConnectionState.waiting) {
+              //         return Center(
+              //           child: TiLoading(),
+              //         );
+              //       } else if (snapshot.hasError) {
+              //         return Center(
+              //           child: Text('An error occued ${snapshot.error}'),
+              //         );
+              //       } else {
+              //         return ListView.builder(
+              //           itemCount: categories?.length ?? 0,
+              //           itemBuilder: (context, index) {
+              //             return FluButton(
+              //               onPressed: () {
+              //                 Get.to(
+              //                     () => Quizz(
+              //                         link:
+              //                             "https://opentdb.com/api.php?amount=10&category=${categories?[index]['id']}&type=boolean"),
+              //                     transition: Transition.rightToLeft,
+              //                     duration: Duration(seconds: 2));
+              //               },
+              //               backgroundColor: Colors.transparent,
+              //               child: Container(
+              //                 width: double.infinity,
+              //                 height: screenHeight(context) * .08,
+              //                 margin: EdgeInsets.only(bottom: 10),
+              //                 decoration: BoxDecoration(
+              //                     color: btnColor,
+              //                     borderRadius:
+              //                         BorderRadius.all(Radius.circular(15))),
+              //                 child: Row(
+              //                   mainAxisAlignment: MainAxisAlignment.center,
+              //                   children: [
+              //                     Text(
+              //                       categories?[index]['name'] ?? '',
+              //                       style: TextStyle(
+              //                           color: Colors.white,
+              //                           fontSize: 10,
+              //                           fontWeight: FontWeight.w700),
+              //                     ),
+              //                     FluIcon(
+              //                       FluIcons.arrowRight,
+              //                       style: FluIconStyles.bulk,
+              //                       color: Colors.white,
+              //                     )
+              //                   ],
+              //                 ),
+              //               ),
+              //             );
+              //           },
+              //         );
+              //       }
+              //     },
+              //   ),
+              // )
             ],
           ),
         ),
       ),
-    );
+    
+  );
   }
 }
