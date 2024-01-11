@@ -13,7 +13,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Colors.orange,
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Padding(
@@ -70,19 +70,19 @@ class _SettingPageState extends State<SettingPage> {
                 margin: EdgeInsets.all(15),
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    color: bgColor, borderRadius: BorderRadius.circular(25)),
+                    color: Colors.white, borderRadius: BorderRadius.circular(25)),
                 child: Row(
                   children: [
                     SizedBox(
                       width: screenWidth(context) *.1,
                       child: FluIcon(
                         FluIcons.user,
-                        color: Colors.white,
+                        color: Colors.black,
                         style: FluIconStyles.bulk,
                       ),
                     ),
                     
-                    Text('Informations personnelles', style: TextStyle(color: Colors.white),)
+                    Text('Informations personnelles', style: TextStyle(color: Colors.black),)
                   ],
                 ),
               ),
@@ -92,19 +92,19 @@ class _SettingPageState extends State<SettingPage> {
                 margin: EdgeInsets.only(left: 15, bottom: 15),
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    color: bgColor, borderRadius: BorderRadius.circular(25)),
+                    color: Colors.white, borderRadius: BorderRadius.circular(25)),
                 child: Row(
                   children: [
                     SizedBox(
                       width: screenWidth(context) *.1,
                       child: FluIcon(
                         FluIcons.languageCircle,
-                        color: Colors.white,
+                        color: Colors.black,
                         style: FluIconStyles.bulk,
                       ),
                     ),
                     
-                    Text('Langues', style: TextStyle(color: Colors.white),)
+                    Text('Langues', style: TextStyle(color: Colors.black),)
                   ],
                 ),
               ),
@@ -114,19 +114,19 @@ class _SettingPageState extends State<SettingPage> {
                 margin: EdgeInsets.only(left: 15, bottom: 15),
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    color: bgColor, borderRadius: BorderRadius.circular(25)),
+                    color: Colors.white, borderRadius: BorderRadius.circular(25)),
                 child: Row(
                   children: [
                     SizedBox(
                       width: screenWidth(context) *.1,
                       child: FluIcon(
                         FluIcons.music,
-                        color: Colors.white,
+                        color: Colors.black,
                         style: FluIconStyles.bulk,
                       ),
                     ),
                     
-                    Text('Sons', style: TextStyle(color: Colors.white),)
+                    Text('Sons', style: TextStyle(color: Colors.black),)
                   ],
                 ),
               ),
@@ -136,19 +136,19 @@ class _SettingPageState extends State<SettingPage> {
                 margin: EdgeInsets.only(left: 15, bottom: 15),
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    color: bgColor, borderRadius: BorderRadius.circular(25)),
+                    color: Colors.white, borderRadius: BorderRadius.circular(25)),
                 child: Row(
                   children: [
                     SizedBox(
                       width: screenWidth(context) *.1,
                       child: FluIcon(
                         FluIcons.security,
-                        color: Colors.white,
+                        color: Colors.black,
                         style: FluIconStyles.bulk,
                       ),
                     ),
                     
-                    Text('Politiques', style: TextStyle(color: Colors.white),)
+                    Text('Politiques', style: TextStyle(color: Colors.black),)
                   ],
                 ),
               ),
@@ -158,19 +158,19 @@ class _SettingPageState extends State<SettingPage> {
                 margin: EdgeInsets.only(left: 15, bottom: 15),
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    color: bgColor, borderRadius: BorderRadius.circular(25)),
+                    color: Colors.white, borderRadius: BorderRadius.circular(25)),
                 child: Row(
                   children: [
                     SizedBox(
                       width: screenWidth(context) *.1,
                       child: FluIcon(
                         FluIcons.logout,
-                        color: Colors.white,
+                        color: Colors.black,
                         style: FluIconStyles.bulk,
                       ),
                     ),
                     
-                    Text('Deconnexion', style: TextStyle(color: Colors.white),)
+                    Text('Deconnexion', style: TextStyle(color: Colors.black),)
                   ],
                 ),
               ),

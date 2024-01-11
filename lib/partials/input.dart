@@ -49,7 +49,7 @@ class TiInput extends StatelessWidget {
           keyboardType: keyboardType,
           controller: inputController,
           style: TextStyle(
-              color: Colors.white),
+              color: Colors.black),
           // controller: _username,
 
           onChanged: ((value) {

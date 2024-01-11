@@ -60,225 +60,336 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        child: SizedBox(
+          width: screenWidth(context),
+          height: screenHeight(context),
+          child: Stack(
+            fit: StackFit.expand,
             children: [
+              SizedBox(
+                  width: screenWidth(context),
+                  height: screenHeight(context),
+                  child: FluImage(
+                    'assets/cinema.jpg',
+                    imageSource: ImageSources.asset,
+                  )),
+              Positioned(
+                  top: 0,
+                  child: SizedBox(
+                    width: screenWidth(context),
+                    height: screenHeight(context) * .4,
+                    child: FluImage(
+                      'assets/logo.jpg',
+                      imageSource: ImageSources.asset,
+                    ),
+                  )),
               SizedBox(
                 height: screenHeight(context) * .03,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const FluAvatar(
-                        defaultAvatarType: FluAvatarTypes.memojis,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '$nom $prenom',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Text(
-                            '$pseudo',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Color.fromARGB(95, 255, 255, 255),
+
+              Positioned(
+                  top: screenHeight(context) * .55,
+                  left: screenWidth(context) * .25,
+                  child: SizedBox(
+                    width: screenWidth(context),
+                    height: screenHeight(context) * .35,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(
+                                () => Quizz(
+                                    link:
+                                        "https://opentdb.com/api.php?amount=10&category=11&type=boolean"),
+                                transition: Transition.rightToLeft,
+                                duration: Duration(seconds: 2));
+                          },
+                          child: Container(
+                            width: screenWidth(context) * .5,
+                            height: screenHeight(context) * .08,
+                            margin: EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15))),
+                            child: Center(
+                              child: Text(
+                                'CINEMA',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  // FluButton.icon(
-                  //   FluIcons.musicCircle,
-                  //   onPressed: () {
-                  //     print("objec");
-                  //     final player = AudioPlayer();
-                  //     player.pause();
-                  //     // stopAudio();
-                  //   },
-                  //   size: 50,
-                  // )
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              // Container(
-              //   width: double.infinity,
-              //   height: screenHeight(context) * .25,
-              //   padding: const EdgeInsets.all(15),
-              //   decoration: BoxDecoration(
-              //       color: Colors.black,
-              //       borderRadius: BorderRadius.circular(25)),
-              //   child: Row(children: [
-              //     SizedBox(
-              //       width: screenWidth(context) * .5,
-              //       child: const Text(
-              //         'Play & Win\n Lorem ipsum dolor emet iset astdrea dkyes',
-              //         style: TextStyle(
-              //           fontSize: 10,
-              //           color: Color.fromARGB(95, 255, 255, 255),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(
+                                () => Quizz(
+                                    link:
+                                        "https://opentdb.com/api.php?amount=10&category=12&type=boolean"),
+                                transition: Transition.rightToLeft,
+                                duration: Duration(seconds: 2));
+                          },
+                          child: Container(
+                            width: screenWidth(context) * .5,
+                            height: screenHeight(context) * .08,
+                            margin: EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15))),
+                            child: Center(
+                              child: Text(
+                                'MUSIQUE',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(
+                                () => Quizz(
+                                    link:
+                                        "https://opentdb.com/api.php?amount=10&category=21&type=boolean"),
+                                transition: Transition.rightToLeft,
+                                duration: Duration(seconds: 2));
+                          },
+                          child: Container(
+                            width: screenWidth(context) * .5,
+                            height: screenHeight(context) * .08,
+                            margin: EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15))),
+                            child: Center(
+                              child: Text(
+                                'SPORT',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ))
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Row(
+              //       children: [
+              //         const FluAvatar(
+              //           defaultAvatarType: FluAvatarTypes.memojis,
+              //         ),
+              //         const SizedBox(
+              //           width: 10,
+              //         ),
+              //         Column(
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           children: [
+              //             Text(
+              //               '$nom $prenom',
+              //               style: const TextStyle(
+              //                   color: Colors.white,
+              //                   fontWeight: FontWeight.w700),
+              //             ),
+              //             Text(
+              //               '$pseudo',
+              //               style: const TextStyle(
+              //                 fontSize: 10,
+              //                 color: Color.fromARGB(95, 255, 255, 255),
+              //               ),
+              //             )
+              //           ],
+              //         ),
+              //       ],
+              //     ),
+              //     // FluButton.icon(
+              //     //   FluIcons.musicCircle,
+              //     //   onPressed: () {
+              //     //     print("objec");
+              //     //     final player = AudioPlayer();
+              //     //     player.pause();
+              //     //     // stopAudio();
+              //     //   },
+              //     //   size: 50,
+              //     // )
+              //   ],
+              // ),
+              // const SizedBox(
+              //   height: 10,
+              // ),
+              // // Container(
+              // //   width: double.infinity,
+              // //   height: screenHeight(context) * .25,
+              // //   padding: const EdgeInsets.all(15),
+              // //   decoration: BoxDecoration(
+              // //       color: Colors.black,
+              // //       borderRadius: BorderRadius.circular(25)),
+              // //   child: Row(children: [
+              // //     SizedBox(
+              // //       width: screenWidth(context) * .5,
+              // //       child: const Text(
+              // //         'Play & Win\n Lorem ipsum dolor emet iset astdrea dkyes',
+              // //         style: TextStyle(
+              // //           fontSize: 10,
+              // //           color: Color.fromARGB(95, 255, 255, 255),
+              // //         ),
+              // //       ),
+              // //     ),
+              // //     FluImage(
+
+              // //             'https://cdn-icons-png.flaticon.com/512/4752/4752630.png'),
+              // //   ]),
+              // // ),
+              // const SizedBox(
+              //   height: 20,
+              // ),
+              // // const Row(
+              // //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // //   children: [
+              // //     Text(
+              // //       'Categories',
+              // //       style: TextStyle(
+              // //           color: Colors.white, fontWeight: FontWeight.w700),
+              // //     ),
+              // //     FluIcon(
+              // //       FluIcons.arrowRight,
+              // //       style: FluIconStyles.bulk,
+              // //       color: Colors.white,
+              // //     )
+              // //   ],
+              // // ),
+              // const SizedBox(
+              //   height: 10,
+              // ),
+              // Column(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     GestureDetector(
+              //       onTap: () {
+              //         Get.to(
+              //             () => Quizz(
+              //                 link:
+              //                     "https://opentdb.com/api.php?amount=10&category=11&type=boolean"),
+              //             transition: Transition.rightToLeft,
+              //             duration: Duration(seconds: 2));
+              //       },
+              //       child: Container(
+              //         width: double.infinity,
+              //         height: screenHeight(context) * .2,
+              //         margin: EdgeInsets.only(bottom: 10),
+              //         decoration: BoxDecoration(
+              //             color: btnColor,
+              //             borderRadius: BorderRadius.all(Radius.circular(15))),
+              //         child: Center(
+              //           child: Row(
+              //             children: [
+              //               SizedBox(
+              //                 width: screenWidth(context) * .2,
+              //               ),
+              //               Padding(
+              //                 padding: const EdgeInsets.all(35.0),
+              //                 child: FluImage(
+              //                     'https://archive.org/download/cinema-hd-logo_202103/cinema%20hd%20logo.png'),
+              //               ),
+              //               Text(
+              //                 'CINEMA',
+              //                 style: TextStyle(
+              //                     color: Colors.white,
+              //                     fontWeight: FontWeight.w700),
+              //               ),
+              //             ],
+              //           ),
               //         ),
               //       ),
               //     ),
-              //     FluImage(
-
-              //             'https://cdn-icons-png.flaticon.com/512/4752/4752630.png'),
-              //   ]),
-              // ),
-              const SizedBox(
-                height: 20,
-              ),
-              // const Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Text(
-              //       'Categories',
-              //       style: TextStyle(
-              //           color: Colors.white, fontWeight: FontWeight.w700),
+              //     GestureDetector(
+              //       onTap: () {
+              //         Get.to(
+              //             () => Quizz(
+              //                 link:
+              //                     "https://opentdb.com/api.php?amount=10&category=12&type=boolean"),
+              //             transition: Transition.rightToLeft,
+              //             duration: Duration(seconds: 2));
+              //       },
+              //       child: Container(
+              //         width: double.infinity,
+              //         height: screenHeight(context) * .2,
+              //         margin: EdgeInsets.only(bottom: 10),
+              //         decoration: BoxDecoration(
+              //             color: btnColor,
+              //             borderRadius: BorderRadius.all(Radius.circular(15))),
+              //         child: Center(
+              //           child: Row(
+              //             children: [
+              //               SizedBox(
+              //                 width: screenWidth(context) * .2,
+              //               ),
+              //               Padding(
+              //                 padding: const EdgeInsets.all(35.0),
+              //                 child: FluImage(
+              //                     'https://cdn.icon-icons.com/icons2/2201/PNG/512/apple_music_logo_square_icon_134020.png'),
+              //               ),
+              //               Text(
+              //                 'MUSIQUE',
+              //                 style: TextStyle(
+              //                     color: Colors.white,
+              //                     fontWeight: FontWeight.w700),
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //       ),
               //     ),
-              //     FluIcon(
-              //       FluIcons.arrowRight,
-              //       style: FluIconStyles.bulk,
-              //       color: Colors.white,
-              //     )
+              //     GestureDetector(
+              //       onTap: () {
+              //         Get.to(
+              //             () => Quizz(
+              //                 link:
+              //                     "https://opentdb.com/api.php?amount=10&category=21&type=boolean"),
+              //             transition: Transition.rightToLeft,
+              //             duration: Duration(seconds: 2));
+              //       },
+              //       child: Container(
+              //         width: double.infinity,
+              //         height: screenHeight(context) * .2,
+              //         margin: EdgeInsets.only(bottom: 10),
+              //         decoration: BoxDecoration(
+              //             color: btnColor,
+              //             borderRadius: BorderRadius.all(Radius.circular(15))),
+              //         child: Center(
+              //           child: Row(
+              //             children: [
+              //               SizedBox(
+              //                 width: screenWidth(context) * .2,
+              //               ),
+              //               Padding(
+              //                 padding: const EdgeInsets.all(35.0),
+              //                 child: FluImage(
+              //                     'https://static.vecteezy.com/system/resources/previews/013/923/534/non_2x/sports-black-car-logo-png.png'),
+              //               ),
+              //               Text(
+              //                 'SPORT',
+              //                 style: TextStyle(
+              //                     color: Colors.white,
+              //                     fontWeight: FontWeight.w700),
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //       ),
+              //     ),
               //   ],
-              // ),
-              const SizedBox(
-                height: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(
-                          () => Quizz(
-                              link:
-                                  "https://opentdb.com/api.php?amount=10&category=11&type=boolean"),
-                          transition: Transition.rightToLeft,
-                          duration: Duration(seconds: 2));
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: screenHeight(context) * .2,
-                      margin: EdgeInsets.only(bottom: 10),
-                      decoration: BoxDecoration(
-                          color: btnColor,
-                          borderRadius: BorderRadius.all(Radius.circular(15))),
-                      child: Center(
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: screenWidth(context) * .2,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(35.0),
-                              child: FluImage(
-                                  'https://archive.org/download/cinema-hd-logo_202103/cinema%20hd%20logo.png'),
-                            ),
-                            Text(
-                              'CINEMA',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(
-                          () => Quizz(
-                              link:
-                                  "https://opentdb.com/api.php?amount=10&category=12&type=boolean"),
-                          transition: Transition.rightToLeft,
-                          duration: Duration(seconds: 2));
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: screenHeight(context) * .2,
-                      margin: EdgeInsets.only(bottom: 10),
-                      decoration: BoxDecoration(
-                          color: btnColor,
-                          borderRadius: BorderRadius.all(Radius.circular(15))),
-                      child: Center(
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: screenWidth(context) * .2,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(35.0),
-                              child: FluImage(
-                                  'https://cdn.icon-icons.com/icons2/2201/PNG/512/apple_music_logo_square_icon_134020.png'),
-                            ),
-                            Text(
-                              'MUSIQUE',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(
-                          () => Quizz(
-                              link:
-                                  "https://opentdb.com/api.php?amount=10&category=21&type=boolean"),
-                          transition: Transition.rightToLeft,
-                          duration: Duration(seconds: 2));
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: screenHeight(context) * .2,
-                      margin: EdgeInsets.only(bottom: 10),
-                      decoration: BoxDecoration(
-                          color: btnColor,
-                          borderRadius: BorderRadius.all(Radius.circular(15))),
-                      child: Center(
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: screenWidth(context) * .2,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(35.0),
-                              child: FluImage(
-                                  'https://static.vecteezy.com/system/resources/previews/013/923/534/non_2x/sports-black-car-logo-png.png'),
-                            ),
-                            Text(
-                              'SPORT',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              )
+              // )
               // SizedBox(
               //   width: screenWidth(context),
               //   height: screenHeight(context) * .5,
@@ -344,7 +455,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-    
-  );
+    );
   }
 }
