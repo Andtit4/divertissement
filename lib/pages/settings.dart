@@ -13,10 +13,71 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange,
+      // backgroundColor: Colors.orange,
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Padding(
+          physics: BouncingScrollPhysics(),
+          child: SizedBox(
+            width: screenWidth(context),
+            height: screenHeight(context),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                FluImage(
+                  'assets/sport.jpg',
+                  imageSource: ImageSources.asset,
+                ),
+                Positioned(
+                    top: 0,
+                    child: SizedBox(
+                      width: screenWidth(context),
+                      height: screenHeight(context) * .4,
+                      child: FluImage(
+                        'assets/logo.jpg',
+                        imageSource: ImageSources.asset,
+                      ),
+                    )),
+                Positioned(
+                  top: screenHeight(context) * .6,
+                  right: 10,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Profil',
+                      style: TextStyle(
+                          color: Colors.amber,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Musique',
+                      style: TextStyle(
+                          color: Colors.amber,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Langue',
+                      style: TextStyle(
+                          color: Colors.amber,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Politique',
+                      style: TextStyle(
+                          color: Colors.amber,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ))
+              ],
+            ),
+          )
+
+          /*  Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,10 +235,13 @@ class _SettingPageState extends State<SettingPage> {
                   ],
                 ),
               ),
+            
+
+            
             ],
           ),
-        ),
-      ),
+        ), */
+          ),
     );
   }
 }
