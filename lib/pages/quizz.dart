@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class Quizz extends StatefulWidget {
   final String link;
-  const Quizz({super.key, required this.link});
+  const Quizz({super.key,  required this.link});
 
   @override
   State<Quizz> createState() => _QuizzState();

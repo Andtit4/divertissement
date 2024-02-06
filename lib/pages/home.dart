@@ -99,10 +99,16 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Get.to(
+                            /* Get.to(
                                 () => Quizz(
                                     link:
                                         "https://opentdb.com/api.php?amount=10&category=11&type=boolean"),
+                                transition: Transition.rightToLeft,
+                                duration: Duration(seconds: 2)); */
+                                Get.to(
+                                () => Quizz(
+                                    link:
+                                        "http://192.168.100.156/quizz/api/getQuestionByCategory.php?categorie=CINEMA"),
                                 transition: Transition.rightToLeft,
                                 duration: Duration(seconds: 2));
                           },
@@ -129,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                             Get.to(
                                 () => Quizz(
                                     link:
-                                        "https://opentdb.com/api.php?amount=10&category=12&type=boolean"),
+                                        "http://192.168.100.156/quizz/api/getQuestionByCategory.php?categorie=MUSIQUE"),
                                 transition: Transition.rightToLeft,
                                 duration: Duration(seconds: 2));
                           },
@@ -156,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                             Get.to(
                                 () => Quizz(
                                     link:
-                                        "https://opentdb.com/api.php?amount=10&category=21&type=boolean"),
+                                        "http://192.168.100.156/quizz/api/getQuestionByCategory.php?categorie=SPORT"),
                                 transition: Transition.rightToLeft,
                                 duration: Duration(seconds: 2));
                           },
