@@ -5,6 +5,7 @@ import 'package:divertissement/pages/quizz.dart';
 import 'package:divertissement/partials/image.dart';
 import 'package:divertissement/partials/loading.dart';
 import 'package:divertissement/services/getCategories.dart';
+import 'package:divertissement/services/local.dart';
 import 'package:divertissement/services/sound.dart';
 import 'package:divertissement/utils/constants.dart';
 import 'package:flukit/flukit.dart';
@@ -161,8 +162,8 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Get.to(
                                 () => Quizz(
-                                    link:
-                                        "http://192.168.100.156/quizz/api/getQuestionByCategory.php?categorie=SPORT"),
+                                    link: link('getQuestionByCategory.php?categorie=SPORT', '')
+                                        /* "http://192.168.100.156/quizz/api/getQuestionByCategory.php?categorie=SPORT" */),
                                 transition: Transition.rightToLeft,
                                 duration: Duration(seconds: 2));
                           },
