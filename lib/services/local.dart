@@ -1,8 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-link(route, endpoint) async {
-  // String hostLink = "";
-  String hostLink = "https://divertissement.rekou.net/api" + "/" + route + "/" + endpoint;
+link(route, endpoint) {
+  String hostLink = "";
+  hostLink = "https://divertissement.rekou.net/api" + "/" + route;
   return hostLink;
 }
 

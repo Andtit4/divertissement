@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:divertissement/model/question_model.dart';
+import 'package:divertissement/model/response_model.dart';
+import 'package:divertissement/services/local.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:divertissement/partials/loading.dart';
 import 'package:divertissement/utils/constants.dart';
@@ -23,11 +25,12 @@ class _QuizzState extends State<Quizz> {
   PageController controller = PageController();
   int currentPage = 1;
 
-   fetchCinemaData() async {
+  fetchCinemaData() async {
     final response = await http.post(Uri.parse(widget.link));
-
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);
+      print('Link: ${widget.link}');
+      print('questions: $jsonData');
       var questions = (jsonData as List<dynamic>)
           .map((json) => QuestionModel.fromJson(json))
           .toList();
@@ -36,6 +39,21 @@ class _QuizzState extends State<Quizz> {
       questions = cinemaData['results']; */
     } else {
       throw Exception('Erreur de chargement des données de la question');
+    }
+  }
+
+  fechResponses(id_question) async {
+    String apiLink =
+        link('getReponseByQuestion.php?id_question=$id_question', '');
+    final response = await http.get(Uri.parse(apiLink));
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      var responses = (jsonData as List<dynamic>)
+          .map((json) => ResponseModel.fromJson(json))
+          .toList();
+      return responses;
+    } else {
+      throw Exception('Erreur de chargement de la réponse');
     }
   }
 
@@ -99,6 +117,7 @@ class _QuizzState extends State<Quizz> {
                           ),
                         );
                       } else {
+                        List<QuestionModel> data = snapshot.data ?? [];
                         return PageView.builder(
                             controller: controller,
                             scrollDirection: Axis.horizontal,
@@ -106,7 +125,7 @@ class _QuizzState extends State<Quizz> {
                             onPageChanged: (page) {
                               currentPage == page;
                             },
-                            itemCount: questions?.length ?? 0,
+                            itemCount: data.length,
                             itemBuilder: (context, index) {
                               return Center(
                                 child: Container(
@@ -134,8 +153,7 @@ class _QuizzState extends State<Quizz> {
                                                 fontSize: 12),
                                           ),
                                           Text(
-                                            questions?[index]['difficulty'] ??
-                                                '',
+                                            data[index].categorie,
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 12),
@@ -146,7 +164,7 @@ class _QuizzState extends State<Quizz> {
                                         height: 20,
                                       ),
                                       Text(
-                                        questions?[index]['question'] ?? '',
+                                        data[index].question,
                                         style: TextStyle(
                                             fontSize: 18,
                                             color: Colors.white,
@@ -167,7 +185,7 @@ class _QuizzState extends State<Quizz> {
                                         children: [
                                           FluButton(
                                             onPressed: () {
-                                              if (questions?[index]
+                                              /* if (questions?[index]
                                                       ['correct_answer'] ==
                                                   'True') {
                                                 ScaffoldMessenger.of(context)
@@ -193,7 +211,7 @@ class _QuizzState extends State<Quizz> {
                                                     duration:
                                                         Duration(seconds: 4),
                                                     curve: Curves.bounceIn);
-                                              }
+                                              } */
 
                                               // if (questions?[index]
                                               //         ['correct_answer'] ==
