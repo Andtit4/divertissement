@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:divertissement/model/question_model.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:divertissement/partials/loading.dart';
 import 'package:divertissement/utils/constants.dart';
@@ -8,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 class Quizz extends StatefulWidget {
   final String link;
-  const Quizz({super.key,  required this.link});
+  const Quizz({super.key, required this.link});
 
   @override
   State<Quizz> createState() => _QuizzState();
@@ -22,12 +23,17 @@ class _QuizzState extends State<Quizz> {
   PageController controller = PageController();
   int currentPage = 1;
 
-  Future<void> fetchCinemaData() async {
+   fetchCinemaData() async {
     final response = await http.post(Uri.parse(widget.link));
 
     if (response.statusCode == 200) {
-      Map<String, dynamic> cinemaData = json.decode(response.body);
-      questions = cinemaData['results'];
+      var jsonData = json.decode(response.body);
+      var questions = (jsonData as List<dynamic>)
+          .map((json) => QuestionModel.fromJson(json))
+          .toList();
+      return questions;
+      /*   Map<String, dynamic> cinemaData = json.decode(response.body);
+      questions = cinemaData['results']; */
     } else {
       throw Exception('Erreur de chargement des données de la question');
     }
@@ -61,7 +67,7 @@ class _QuizzState extends State<Quizz> {
                 height: screenHeight(context) * .04,
               ),
               Positioned(
-                top:screenHeight(context) * .04 ,
+                top: screenHeight(context) * .04,
                 child: FluButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -114,7 +120,8 @@ class _QuizzState extends State<Quizz> {
                                           width: 1, color: borderColor),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         mainAxisAlignment:
@@ -127,7 +134,8 @@ class _QuizzState extends State<Quizz> {
                                                 fontSize: 12),
                                           ),
                                           Text(
-                                            questions?[index]['difficulty'] ?? '',
+                                            questions?[index]['difficulty'] ??
+                                                '',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 12),
@@ -147,7 +155,8 @@ class _QuizzState extends State<Quizz> {
                                       pressed == true
                                           ? Container(
                                               width: double.infinity,
-                                              height: screenHeight(context) * .08,
+                                              height:
+                                                  screenHeight(context) * .08,
                                               decoration: BoxDecoration(
                                                   color: colorResponse),
                                             )
@@ -162,7 +171,8 @@ class _QuizzState extends State<Quizz> {
                                                       ['correct_answer'] ==
                                                   'True') {
                                                 ScaffoldMessenger.of(context)
-                                                    .showSnackBar(const SnackBar(
+                                                    .showSnackBar(
+                                                        const SnackBar(
                                                   content:
                                                       Text('Bonne Réponse !'),
                                                   backgroundColor: Colors.green,
@@ -173,7 +183,8 @@ class _QuizzState extends State<Quizz> {
                                                     curve: Curves.bounceIn);
                                               } else {
                                                 ScaffoldMessenger.of(context)
-                                                    .showSnackBar(const SnackBar(
+                                                    .showSnackBar(
+                                                        const SnackBar(
                                                   content:
                                                       Text('Mauvaise réponse'),
                                                   backgroundColor: Colors.red,
@@ -183,7 +194,7 @@ class _QuizzState extends State<Quizz> {
                                                         Duration(seconds: 4),
                                                     curve: Curves.bounceIn);
                                               }
-                
+
                                               // if (questions?[index]
                                               //         ['correct_answer'] ==
                                               //     'True') {
@@ -210,7 +221,8 @@ class _QuizzState extends State<Quizz> {
                                                       ['correct_answer'] ==
                                                   'False') {
                                                 ScaffoldMessenger.of(context)
-                                                    .showSnackBar(const SnackBar(
+                                                    .showSnackBar(
+                                                        const SnackBar(
                                                   content:
                                                       Text('Bonne Réponse !'),
                                                   backgroundColor: Colors.green,
@@ -221,7 +233,8 @@ class _QuizzState extends State<Quizz> {
                                                     curve: Curves.bounceIn);
                                               } else {
                                                 ScaffoldMessenger.of(context)
-                                                    .showSnackBar(const SnackBar(
+                                                    .showSnackBar(
+                                                        const SnackBar(
                                                   content:
                                                       Text('Mauvaise réponse'),
                                                   backgroundColor: Colors.red,

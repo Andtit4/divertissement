@@ -108,8 +108,8 @@ class _HomePageState extends State<HomePage> {
                                 duration: Duration(seconds: 2)); */
                                 Get.to(
                                 () => Quizz(
-                                    link:
-                                        "http://192.168.100.156/quizz/api/getQuestionByCategory.php?categorie=CINEMA"),
+                                    link: link('getQuestionByCategory.php?categorie=CINEMA', '')
+                                        /* "http://192.168.100.156/quizz/api/getQuestionByCategory.php?categorie=SPORT" */),
                                 transition: Transition.rightToLeft,
                                 duration: Duration(seconds: 2));
                           },
@@ -135,8 +135,8 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Get.to(
                                 () => Quizz(
-                                    link:
-                                        "http://192.168.100.156/quizz/api/getQuestionByCategory.php?categorie=MUSIQUE"),
+                                    link: link('getQuestionByCategory.php?categorie=MUSIQUE', '')
+                                        /* "http://192.168.100.156/quizz/api/getQuestionByCategory.php?categorie=SPORT" */),
                                 transition: Transition.rightToLeft,
                                 duration: Duration(seconds: 2));
                           },
@@ -160,6 +160,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         GestureDetector(
                           onTap: () {
+                          
                             Get.to(
                                 () => Quizz(
                                     link: link('getQuestionByCategory.php?categorie=SPORT', '')
