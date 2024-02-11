@@ -1,11 +1,15 @@
 class QuestionModel {
+  int id;
   String question;
   String categorie;
 
-  QuestionModel({required this.question, required this.categorie});
+  QuestionModel(
+      {required this.question, required this.categorie, required this.id});
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
     return QuestionModel(
-        question: json['question'], categorie: json['categorie']);
+        id: json['id'],
+        question: json['question'],
+        categorie: json['categorie']);
   }
 }

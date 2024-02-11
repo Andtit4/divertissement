@@ -42,7 +42,7 @@ class _QuizzState extends State<Quizz> {
     }
   }
 
-  fechResponses(id_question) async {
+  fetchResponses(id_question) async {
     String apiLink =
         link('getReponseByQuestion.php?id_question=$id_question', '');
     final response = await http.get(Uri.parse(apiLink));
@@ -170,7 +170,106 @@ class _QuizzState extends State<Quizz> {
                                             color: Colors.white,
                                             fontWeight: FontWeight.w700),
                                       ),
-                                      pressed == true
+                                      SizedBox(
+                                        height: screenHeight(context) * .02,
+                                      ),
+                                      Text(
+                                        'Réponse: ',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                        width: screenWidth(context) * .8,
+                                        height: screenHeight(context) * .3,
+                                        child: FutureBuilder(
+                                            future:
+                                                fetchResponses(data[index].id),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return TiLoading();
+                                              } else if (snapshot.hasError) {
+                                                return Center(
+                                                  child: Text(
+                                                    'Oups response part ${snapshot.error}',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                );
+                                              } else {
+                                                List<ResponseModel> response =
+                                                    snapshot.data ?? [];
+                                                if (response.length == 0) {
+                                                  return Center(
+                                                    child: Text(
+                                                      'Aucune réponse ajoutée pour cette question',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  );
+                                                }
+                                                return ListView.builder(
+                                                  itemCount: response.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return FluButton(
+                                                        onPressed: () {
+                                                          if (response[index]
+                                                                  .type ==
+                                                              'bonne reponse') {
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                    const SnackBar(
+                                                              content: Text(
+                                                                  'Bonne Réponse !'),
+                                                              backgroundColor:
+                                                                  Colors.green,
+                                                            ));
+
+                                                            controller.nextPage(
+                                                                duration:
+                                                                    Duration(
+                                                                        seconds:
+                                                                            4),
+                                                                curve: Curves
+                                                                    .easeIn);
+                                                          } else {
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                    const SnackBar(
+                                                              content: Text(
+                                                                  'Mauvaise réponse x'),
+                                                              backgroundColor:
+                                                                  Colors.red,
+                                                            ));
+
+                                                            controller.nextPage(
+                                                                duration:
+                                                                    Duration(
+                                                                        seconds:
+                                                                            4),
+                                                                curve: Curves
+                                                                    .easeIn);
+                                                          }
+                                                        },
+                                                        child: Text(
+                                                          response[index]
+                                                              .reponse,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                        ));
+                                                  },
+                                                );
+                                              }
+                                            }),
+                                      )
+                                      /* pressed == true
                                           ? Container(
                                               width: double.infinity,
                                               height:
@@ -272,7 +371,7 @@ class _QuizzState extends State<Quizz> {
                                             ),
                                           ),
                                         ],
-                                      )
+                                      ) */
                                     ],
                                   ),
                                 ),

@@ -1,8 +1,8 @@
 class ResponseModel {
-  String id;
+  int id;
   String reponse;
   String type;
-  String id_question;
+  int id_question;
 
   ResponseModel(
       {required this.id,
