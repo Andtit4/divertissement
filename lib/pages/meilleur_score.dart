@@ -11,11 +11,11 @@ class MeilleurScore extends StatefulWidget {
 }
 
 class _MeilleurScoreState extends State<MeilleurScore> {
-  late int highScore = 0;
+  String highScore = '';
   setScore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      highScore = prefs.getInt('score')!.toInt();
+      highScore = prefs.getString('score').toString();
     });
   }
 
@@ -23,6 +23,7 @@ class _MeilleurScoreState extends State<MeilleurScore> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    setScore();
   }
 
   @override

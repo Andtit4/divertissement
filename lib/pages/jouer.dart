@@ -45,7 +45,7 @@ class _JouerScreenState extends State<JouerScreen> {
                     height: screenHeight(context) * .065,
                     backgroundColor: Colors.amber,
                     onPressed: () {
-                      Get.offAll(() => const TypeGame(),
+                      Get.to(() => const TypeGame(),
                           transition: Transition.leftToRightWithFade,
                           duration: const Duration(seconds: 1));
                     },

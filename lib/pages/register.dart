@@ -118,7 +118,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ));
                         } else {
                           register(pseudoController.text, nomController.text,
-                              prenomController.text);
+                              prenomController.text, '0');
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Bienvenu')));
                           Get.offAll(() => BottomNavBar(),

@@ -29,19 +29,16 @@ class _QuizzState extends State<Quizz> {
   bool pressed = false;
   PageController controller = PageController();
   int currentPage = 1;
-  late int score = 0;
-  late int highScore = 0;
+  String highScore = '';
   setScore(score) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      highScore = prefs.setInt('score', score) as int;
-    });
+    prefs.setInt('score', score);
   }
 
   getScore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      highScore = prefs.getInt('score')!.toInt();
+      highScore = prefs.getString('score').toString();
     });
   }
 
@@ -238,7 +235,7 @@ class _QuizzState extends State<Quizz> {
                                                   itemBuilder:
                                                       (context, index) {
                                                     return FluButton(
-                                                        onPressed: () {
+                                                        onPressed: () async {
                                                           if (response[index]
                                                                   .type ==
                                                               'bonne reponse') {
@@ -256,22 +253,50 @@ class _QuizzState extends State<Quizz> {
                                                                     .page ==
                                                                 data.length -
                                                                     1) {
-                                                              Get.defaultDialog(
-                                                                title:
-                                                                    "Fin des pages",
-                                                                middleText:
-                                                                    "Plus de pages disponibles.",
-                                                                actions: [
-                                                                  ElevatedButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      Get.back(); // Ferme la boîte de dialogue
-                                                                    },
-                                                                    child: Text(
-                                                                        "OK"),
-                                                                  ),
-                                                                ],
-                                                              );
+                                                              if (int.parse(
+                                                                      highScore) >=
+                                                                  scoreController
+                                                                      .score
+                                                                      .toInt()) {
+                                                                Get.defaultDialog(
+                                                                  title:
+                                                                      "Fin de partie",
+                                                                  middleText:
+                                                                      "Votre score est de ${scoreController.score}.",
+                                                                  actions: [
+                                                                    ElevatedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Get.back(); // Ferme la boîte de dialogue
+                                                                        Get.back();
+                                                                      },
+                                                                      child: Text(
+                                                                          "OK"),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              } else {
+                                                               await setScore(
+                                                                    scoreController
+                                                                        .score);
+                                                                Get.defaultDialog(
+                                                                  title:
+                                                                      "Meilleur score",
+                                                                  middleText:
+                                                                      "Votre score est de ${scoreController.score}.",
+                                                                  actions: [
+                                                                    ElevatedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Get.back(); // Ferme la boîte de dialogue
+                                                                        Get.back();
+                                                                      },
+                                                                      child: Text(
+                                                                          "OK"),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              }
                                                             }
                                                             ScaffoldMessenger
                                                                     .of(context)
@@ -297,27 +322,50 @@ class _QuizzState extends State<Quizz> {
                                                                     .page ==
                                                                 data.length -
                                                                     1) {
-                                                                      if (highScore < scoreController.score.toInt()) {
-
-                                                                      }
-                                                              Get.defaultDialog(
-                                                                title:
-                                                                    "Fin de partie",
-                                                                middleText:
-                                                                    "Votre score est de ${scoreController.score}.",
-                                                                actions: [
-                                                                  ElevatedButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      Get.back(); // Ferme la boîte de dialogue
-                                                                      Get.back();
-
-                                                                    },
-                                                                    child: Text(
-                                                                        "OK"),
-                                                                  ),
-                                                                ],
-                                                              );
+                                                              if (int.parse(
+                                                                      highScore) >=
+                                                                  scoreController
+                                                                      .score
+                                                                      .toInt()) {
+                                                                Get.defaultDialog(
+                                                                  title:
+                                                                      "Fin de partie",
+                                                                  middleText:
+                                                                      "Votre score est de ${scoreController.score}.",
+                                                                  actions: [
+                                                                    ElevatedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Get.back(); // Ferme la boîte de dialogue
+                                                                        Get.back();
+                                                                      },
+                                                                      child: Text(
+                                                                          "OK"),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              } else {
+                                                                setScore(
+                                                                    scoreController
+                                                                        .score);
+                                                                Get.defaultDialog(
+                                                                  title:
+                                                                      "Meilleur score",
+                                                                  middleText:
+                                                                      "Votre score est de ${scoreController.score}.",
+                                                                  actions: [
+                                                                    ElevatedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Get.back(); // Ferme la boîte de dialogue
+                                                                        Get.back();
+                                                                      },
+                                                                      child: Text(
+                                                                          "OK"),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              }
                                                             }
 
                                                             controller.nextPage(

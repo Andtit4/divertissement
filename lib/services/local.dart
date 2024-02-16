@@ -6,10 +6,10 @@ link(route, endpoint) {
   return hostLink;
 }
 
-register(pseudo, nom, prenom) async {
+register(pseudo, nom, prenom, score) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString('pseudo', pseudo);
   prefs.setString('nom', nom);
   prefs.setString('prenom', prenom);
-  prefs.setInt('score', 0);
+  prefs.setString('score', score);
 }
