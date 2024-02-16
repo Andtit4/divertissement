@@ -11,4 +11,5 @@ register(pseudo, nom, prenom) async {
   prefs.setString('pseudo', pseudo);
   prefs.setString('nom', nom);
   prefs.setString('prenom', prenom);
+  prefs.setInt('score', 0);
 }

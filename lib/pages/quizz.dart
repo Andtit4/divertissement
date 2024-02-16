@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'package:divertissement/model/question_model.dart';
 import 'package:divertissement/model/response_model.dart';
 import 'package:divertissement/services/local.dart';
+import 'package:divertissement/services/score_controller.dart';
+import 'package:get/get.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:divertissement/partials/loading.dart';
 import 'package:divertissement/utils/constants.dart';
 import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Quizz extends StatefulWidget {
   final String link;
@@ -18,12 +21,29 @@ class Quizz extends StatefulWidget {
 }
 
 class _QuizzState extends State<Quizz> {
+  final ScoreController scoreController = Get.put(ScoreController());
+
   List<dynamic>? questions;
   Color borderColor = Colors.transparent;
   Color colorResponse = Colors.red;
   bool pressed = false;
   PageController controller = PageController();
   int currentPage = 1;
+  late int score = 0;
+  late int highScore = 0;
+  setScore(score) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      highScore = prefs.setInt('score', score) as int;
+    });
+  }
+
+  getScore() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      highScore = prefs.getInt('score')!.toInt();
+    });
+  }
 
   fetchCinemaData() async {
     final response = await http.post(Uri.parse(widget.link));
@@ -61,6 +81,7 @@ class _QuizzState extends State<Quizz> {
   void initState() {
     super.initState();
     fetchCinemaData();
+    getScore();
   }
 
   @override
@@ -86,16 +107,23 @@ class _QuizzState extends State<Quizz> {
               ),
               Positioned(
                 top: screenHeight(context) * .04,
-                child: FluButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    backgroundColor: Colors.transparent,
-                    child: FluIcon(
-                      FluIcons.closeCircle,
-                      color: Colors.white,
-                      style: FluIconStyles.bulk,
-                    )),
+                child: Row(
+                  children: [
+                    FluButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        backgroundColor: Colors.transparent,
+                        child: FluIcon(
+                          FluIcons.closeCircle,
+                          color: Colors.white,
+                          style: FluIconStyles.bulk,
+                        )),
+                    Obx(() => Text('Score: ${scoreController.score} points',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold))),
+                  ],
+                ),
               ),
               Positioned(
                 top: screenHeight(context) * .15,
@@ -146,12 +174,6 @@ class _QuizzState extends State<Quizz> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            'True / False',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12),
-                                          ),
                                           Text(
                                             data[index].categorie,
                                             style: TextStyle(
@@ -220,6 +242,37 @@ class _QuizzState extends State<Quizz> {
                                                           if (response[index]
                                                                   .type ==
                                                               'bonne reponse') {
+                                                            scoreController
+                                                                .score += 5;
+                                                            controller.nextPage(
+                                                                duration:
+                                                                    Duration(
+                                                                        seconds:
+                                                                            4),
+                                                                curve: Curves
+                                                                    .easeIn);
+
+                                                            if (controller
+                                                                    .page ==
+                                                                data.length -
+                                                                    1) {
+                                                              Get.defaultDialog(
+                                                                title:
+                                                                    "Fin des pages",
+                                                                middleText:
+                                                                    "Plus de pages disponibles.",
+                                                                actions: [
+                                                                  ElevatedButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Get.back(); // Ferme la boîte de dialogue
+                                                                    },
+                                                                    child: Text(
+                                                                        "OK"),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            }
                                                             ScaffoldMessenger
                                                                     .of(context)
                                                                 .showSnackBar(
@@ -229,14 +282,6 @@ class _QuizzState extends State<Quizz> {
                                                               backgroundColor:
                                                                   Colors.green,
                                                             ));
-
-                                                            controller.nextPage(
-                                                                duration:
-                                                                    Duration(
-                                                                        seconds:
-                                                                            4),
-                                                                curve: Curves
-                                                                    .easeIn);
                                                           } else {
                                                             ScaffoldMessenger
                                                                     .of(context)
@@ -247,6 +292,33 @@ class _QuizzState extends State<Quizz> {
                                                               backgroundColor:
                                                                   Colors.red,
                                                             ));
+
+                                                            if (controller
+                                                                    .page ==
+                                                                data.length -
+                                                                    1) {
+                                                                      if (highScore < scoreController.score.toInt()) {
+
+                                                                      }
+                                                              Get.defaultDialog(
+                                                                title:
+                                                                    "Fin de partie",
+                                                                middleText:
+                                                                    "Votre score est de ${scoreController.score}.",
+                                                                actions: [
+                                                                  ElevatedButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Get.back(); // Ferme la boîte de dialogue
+                                                                      Get.back();
+
+                                                                    },
+                                                                    child: Text(
+                                                                        "OK"),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            }
 
                                                             controller.nextPage(
                                                                 duration:
@@ -269,109 +341,6 @@ class _QuizzState extends State<Quizz> {
                                               }
                                             }),
                                       )
-                                      /* pressed == true
-                                          ? Container(
-                                              width: double.infinity,
-                                              height:
-                                                  screenHeight(context) * .08,
-                                              decoration: BoxDecoration(
-                                                  color: colorResponse),
-                                            )
-                                          : Spacer(),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          FluButton(
-                                            onPressed: () {
-                                              /* if (questions?[index]
-                                                      ['correct_answer'] ==
-                                                  'True') {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                        const SnackBar(
-                                                  content:
-                                                      Text('Bonne Réponse !'),
-                                                  backgroundColor: Colors.green,
-                                                ));
-                                                controller.nextPage(
-                                                    duration:
-                                                        Duration(seconds: 4),
-                                                    curve: Curves.bounceIn);
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                        const SnackBar(
-                                                  content:
-                                                      Text('Mauvaise réponse'),
-                                                  backgroundColor: Colors.red,
-                                                ));
-                                                controller.nextPage(
-                                                    duration:
-                                                        Duration(seconds: 4),
-                                                    curve: Curves.bounceIn);
-                                              } */
-
-                                              // if (questions?[index]
-                                              //         ['correct_answer'] ==
-                                              //     'True') {
-                                              //   setState(() {
-                                              //     borderColor == Colors.green;
-                                              //   });
-                                              // } else {
-                                              //   setState(() {
-                                              //     borderColor == Colors.red;
-                                              //   });
-                                              // }
-                                            },
-                                            backgroundColor: Colors.green,
-                                            child: Text(
-                                              'True',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14),
-                                            ),
-                                          ),
-                                          FluButton(
-                                            onPressed: () {
-                                              if (questions?[index]
-                                                      ['correct_answer'] ==
-                                                  'False') {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                        const SnackBar(
-                                                  content:
-                                                      Text('Bonne Réponse !'),
-                                                  backgroundColor: Colors.green,
-                                                ));
-                                                controller.nextPage(
-                                                    duration:
-                                                        Duration(seconds: 4),
-                                                    curve: Curves.bounceIn);
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                        const SnackBar(
-                                                  content:
-                                                      Text('Mauvaise réponse'),
-                                                  backgroundColor: Colors.red,
-                                                ));
-                                                controller.nextPage(
-                                                    duration:
-                                                        Duration(seconds: 4),
-                                                    curve: Curves.easeIn);
-                                              }
-                                            },
-                                            backgroundColor: Colors.red,
-                                            child: Text(
-                                              'False',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14),
-                                            ),
-                                          ),
-                                        ],
-                                      ) */
                                     ],
                                   ),
                                 ),

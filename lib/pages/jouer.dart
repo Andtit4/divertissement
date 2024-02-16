@@ -1,3 +1,4 @@
+import 'package:divertissement/pages/meilleur_score.dart';
 import 'package:divertissement/pages/type_game.dart';
 import 'package:divertissement/utils/constants.dart';
 import 'package:flukit/flukit.dart';
@@ -50,6 +51,26 @@ class _JouerScreenState extends State<JouerScreen> {
                     },
                     child: Text(
                       'Jouer maintenant',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24),
+                    )),
+              ),
+              Positioned(
+                top: screenHeight(context) * .7,
+                left: 20,
+                child: FluButton(
+                    width: screenWidth(context) * .9,
+                    height: screenHeight(context) * .065,
+                    backgroundColor: Colors.amber,
+                    onPressed: () {
+                      Get.to(() => const MeilleurScore(),
+                          transition: Transition.leftToRightWithFade,
+                          duration: const Duration(seconds: 1));
+                    },
+                    child: Text(
+                      'Meilleur score',
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
