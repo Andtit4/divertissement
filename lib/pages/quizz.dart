@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:divertissement/model/question_model.dart';
 import 'package:divertissement/model/response_model.dart';
+import 'package:divertissement/partials/bottom_nav_bar.dart';
 import 'package:divertissement/services/local.dart';
 import 'package:divertissement/services/score_controller.dart';
 import 'package:get/get.dart';
@@ -30,6 +32,9 @@ class _QuizzState extends State<Quizz> {
   PageController controller = PageController();
   int currentPage = 1;
   String highScore = '';
+  Timer? _timer;
+  int _seconds = 0;
+
   setScore(score) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('score', score);
@@ -79,6 +84,14 @@ class _QuizzState extends State<Quizz> {
     super.initState();
     fetchCinemaData();
     getScore();
+    // _startTimer();
+    scoreController.increment();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -90,7 +103,6 @@ class _QuizzState extends State<Quizz> {
           width: screenWidth(context),
           height: screenHeight(context),
           child: Stack(
-            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                   width: screenWidth(context),
@@ -104,22 +116,35 @@ class _QuizzState extends State<Quizz> {
               ),
               Positioned(
                 top: screenHeight(context) * .04,
-                child: Row(
-                  children: [
-                    FluButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        backgroundColor: Colors.transparent,
-                        child: FluIcon(
-                          FluIcons.closeCircle,
-                          color: Colors.white,
-                          style: FluIconStyles.bulk,
-                        )),
-                    Obx(() => Text('Score: ${scoreController.score} points',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold))),
-                  ],
+                child: SizedBox(
+                  width: screenWidth(context),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          FluButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              backgroundColor: Colors.transparent,
+                              child: FluIcon(
+                                FluIcons.closeCircle,
+                                color: Colors.white,
+                                style: FluIconStyles.bulk,
+                              )),
+                          Obx(() => Text(
+                              'Score: ${scoreController.score} points',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold))),
+                        ],
+                      ),
+                      Obx(() => Text(
+                          'Secondes : ${scoreController.seconds.value}',
+                          style: TextStyle(fontSize: 18, color: Colors.white)))
+                    ],
+                  ),
                 ),
               ),
               Positioned(
@@ -143,6 +168,7 @@ class _QuizzState extends State<Quizz> {
                         );
                       } else {
                         List<QuestionModel> data = snapshot.data ?? [];
+
                         return PageView.builder(
                             controller: controller,
                             scrollDirection: Axis.horizontal,
@@ -152,6 +178,24 @@ class _QuizzState extends State<Quizz> {
                             },
                             itemCount: data.length,
                             itemBuilder: (context, index) {
+                              Timer.periodic(Duration(seconds: 10), (timer) {
+                                if (currentPage < data.length - 1) {
+                                  controller.nextPage(
+                                      duration: Duration(milliseconds: 500),
+                                      curve: Curves.ease);
+                                  currentPage++;
+                                  // scoreController.reinit();
+                                } else {
+                                  _timer?.cancel();
+                                  Navigator.pop(context);
+                                  /* Get.dialog(
+                                    AlertDialog(
+                                      title: Text('Fin des pages'),
+                                      content: Text('Il n\'y a plus de page.'),
+                                    ),
+                                  ); */
+                                }
+                              });
                               return Center(
                                 child: Container(
                                   width: screenWidth(context) * .9,
@@ -245,9 +289,11 @@ class _QuizzState extends State<Quizz> {
                                                                 duration:
                                                                     Duration(
                                                                         seconds:
-                                                                            4),
+                                                                            1),
                                                                 curve: Curves
                                                                     .easeIn);
+                                                            scoreController
+                                                                .reinit();
 
                                                             if (controller
                                                                     .page ==
@@ -267,8 +313,8 @@ class _QuizzState extends State<Quizz> {
                                                                     ElevatedButton(
                                                                       onPressed:
                                                                           () {
-                                                                        Get.back(); // Ferme la boîte de dialogue
-                                                                        Get.back();
+                                                                        Get.offAll(() =>
+                                                                            BottomNavBar());
                                                                       },
                                                                       child: Text(
                                                                           "OK"),
@@ -276,7 +322,7 @@ class _QuizzState extends State<Quizz> {
                                                                   ],
                                                                 );
                                                               } else {
-                                                               await setScore(
+                                                                await setScore(
                                                                     scoreController
                                                                         .score);
                                                                 Get.defaultDialog(
@@ -288,8 +334,10 @@ class _QuizzState extends State<Quizz> {
                                                                     ElevatedButton(
                                                                       onPressed:
                                                                           () {
-                                                                        Get.back(); // Ferme la boîte de dialogue
-                                                                        Get.back();
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                        Get.offAll(() =>
+                                                                            BottomNavBar());
                                                                       },
                                                                       child: Text(
                                                                           "OK"),
@@ -317,6 +365,8 @@ class _QuizzState extends State<Quizz> {
                                                               backgroundColor:
                                                                   Colors.red,
                                                             ));
+                                                            scoreController
+                                                                .reinit();
 
                                                             if (controller
                                                                     .page ==
@@ -336,8 +386,10 @@ class _QuizzState extends State<Quizz> {
                                                                     ElevatedButton(
                                                                       onPressed:
                                                                           () {
-                                                                        Get.back(); // Ferme la boîte de dialogue
-                                                                        Get.back();
+                                                                            Navigator.pop(
+                                                                            context);
+                                                                        Get.offAll(() =>
+                                                                            BottomNavBar());
                                                                       },
                                                                       child: Text(
                                                                           "OK"),
@@ -357,8 +409,8 @@ class _QuizzState extends State<Quizz> {
                                                                     ElevatedButton(
                                                                       onPressed:
                                                                           () {
-                                                                        Get.back(); // Ferme la boîte de dialogue
-                                                                        Get.back();
+                                                                        Navigator.pop(
+                                                                            context);
                                                                       },
                                                                       child: Text(
                                                                           "OK"),
@@ -372,7 +424,7 @@ class _QuizzState extends State<Quizz> {
                                                                 duration:
                                                                     Duration(
                                                                         seconds:
-                                                                            4),
+                                                                            1),
                                                                 curve: Curves
                                                                     .easeIn);
                                                           }

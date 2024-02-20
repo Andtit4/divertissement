@@ -1,5 +1,6 @@
 import 'package:divertissement/pages/meilleur_score.dart';
 import 'package:divertissement/pages/type_game.dart';
+import 'package:divertissement/partials/bottom_nav_bar.dart';
 import 'package:divertissement/utils/constants.dart';
 import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class _JouerScreenState extends State<JouerScreen> {
                     height: screenHeight(context) * .065,
                     backgroundColor: Colors.amber,
                     onPressed: () {
-                      Get.to(() => const TypeGame(),
+                      Get.to(() => const BottomNavBar(),
                           transition: Transition.leftToRightWithFade,
                           duration: const Duration(seconds: 1));
                     },
