@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:divertissement/model/question_model.dart';
 import 'package:divertissement/model/response_model.dart';
 import 'package:divertissement/partials/bottom_nav_bar.dart';
+import 'package:divertissement/partials/seconds.dart';
 import 'package:divertissement/services/local.dart';
+import 'package:divertissement/services/plug.dart';
 import 'package:divertissement/services/score_controller.dart';
 import 'package:get/get.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
@@ -12,6 +14,7 @@ import 'package:divertissement/utils/constants.dart';
 import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Quizz extends StatefulWidget {
@@ -23,7 +26,8 @@ class Quizz extends StatefulWidget {
 }
 
 class _QuizzState extends State<Quizz> {
-  final ScoreController scoreController = Get.put(ScoreController());
+  // final ScoreController scoreController = Get.put(ScoreController());
+  final scoreController = Get.find<ScoreController>();
 
   List<dynamic>? questions;
   Color borderColor = Colors.transparent;
@@ -32,18 +36,20 @@ class _QuizzState extends State<Quizz> {
   PageController controller = PageController();
   int currentPage = 1;
   String highScore = '';
-  Timer? _timer;
+  // late Timer _timer;
   int _seconds = 0;
+  late Duration timer = Duration(seconds: 10);
+  late bool show = false;
 
-  setScore(score) async {
+  setScore(RxInt score) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('score', score);
+    prefs.setInt('score', score.value);
   }
 
   getScore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      highScore = prefs.getString('score').toString();
+      highScore = prefs.getInt('score').toString();
     });
   }
 
@@ -79,18 +85,31 @@ class _QuizzState extends State<Quizz> {
     }
   }
 
+  reinitSecond() {
+    timer = Timer.periodic(Duration(seconds: 10), (timer) {
+      scoreController.reinit();
+    }) as Duration;
+  }
+
   @override
   void initState() {
     super.initState();
     fetchCinemaData();
     getScore();
+
+    Future.delayed(Duration.zero).then((value) {
+      Provider.of(context, listen: false).callMethod();
+    });
     // _startTimer();
-    scoreController.increment();
+    // scoreController.increment();
+    // reinitSecond();
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    // _timer.cancel();
+    // timer.d();
+    controller.dispose();
     super.dispose();
   }
 
@@ -133,16 +152,9 @@ class _QuizzState extends State<Quizz> {
                                 color: Colors.white,
                                 style: FluIconStyles.bulk,
                               )),
-                          Obx(() => Text(
-                              'Score: ${scoreController.score} points',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold))),
+                          SecondsDisplay()
                         ],
                       ),
-                      Obx(() => Text(
-                          'Secondes : ${scoreController.seconds.value}',
-                          style: TextStyle(fontSize: 18, color: Colors.white)))
                     ],
                   ),
                 ),
@@ -169,288 +181,472 @@ class _QuizzState extends State<Quizz> {
                       } else {
                         List<QuestionModel> data = snapshot.data ?? [];
 
-                        return PageView.builder(
-                            controller: controller,
-                            scrollDirection: Axis.horizontal,
-                            physics: NeverScrollableScrollPhysics(),
-                            onPageChanged: (page) {
-                              currentPage == page;
-                            },
-                            itemCount: data.length,
-                            itemBuilder: (context, index) {
-                              Timer.periodic(Duration(seconds: 10), (timer) {
-                                if (currentPage < data.length - 1) {
-                                  controller.nextPage(
-                                      duration: Duration(milliseconds: 500),
-                                      curve: Curves.ease);
-                                  currentPage++;
-                                  // scoreController.reinit();
-                                } else {
-                                  _timer?.cancel();
-                                  Navigator.pop(context);
-                                  /* Get.dialog(
-                                    AlertDialog(
-                                      title: Text('Fin des pages'),
-                                      content: Text('Il n\'y a plus de page.'),
-                                    ),
-                                  ); */
-                                }
-                              });
-                              return Center(
-                                child: Container(
-                                  width: screenWidth(context) * .9,
-                                  height: screenHeight(context) * .7,
-                                  margin: EdgeInsets.all(20),
-                                  padding: EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                      color: Colors.orange.withOpacity(.5),
-                                      border: Border.all(
-                                          width: 1, color: borderColor),
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                        return GetBuilder<ScoreController>(
+                          builder: (controller) {
+                            return PageView.builder(
+                                controller: controller.pageController,
+                                scrollDirection: Axis.horizontal,
+                                physics: NeverScrollableScrollPhysics(),
+                                onPageChanged: (page) {
+                                  scoreController.currentPageIndex == page;
+                                },
+                                itemCount: data.length,
+                                itemBuilder: (context, index) {
+                                  return Center(
+                                    child: Container(
+                                      width: screenWidth(context) * .9,
+                                      height: screenHeight(context) * .7,
+                                      margin: EdgeInsets.all(20),
+                                      padding: EdgeInsets.all(20),
+                                      decoration: BoxDecoration(
+                                          color: Colors.orange.withOpacity(.5),
+                                          border: Border.all(
+                                              width: 1, color: borderColor),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                data[index].categorie,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
                                           Text(
-                                            data[index].categorie,
+                                            data[index].question,
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                          SizedBox(
+                                            height: screenHeight(context) * .02,
+                                          ),
+                                          Text(
+                                            'Réponse: ',
                                             style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 12),
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Text(
-                                        data[index].question,
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                      SizedBox(
-                                        height: screenHeight(context) * .02,
-                                      ),
-                                      Text(
-                                        'Réponse: ',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(
-                                        width: screenWidth(context) * .8,
-                                        height: screenHeight(context) * .3,
-                                        child: FutureBuilder(
-                                            future:
-                                                fetchResponses(data[index].id),
-                                            builder: (BuildContext context,
-                                                AsyncSnapshot snapshot) {
-                                              if (snapshot.connectionState ==
-                                                  ConnectionState.waiting) {
-                                                return TiLoading();
-                                              } else if (snapshot.hasError) {
-                                                return Center(
-                                                  child: Text(
-                                                    'Oups response part ${snapshot.error}',
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                );
-                                              } else {
-                                                List<ResponseModel> response =
-                                                    snapshot.data ?? [];
-                                                if (response.length == 0) {
-                                                  return Center(
-                                                    child: Text(
-                                                      'Aucune réponse ajoutée pour cette question',
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                  );
-                                                }
-                                                return ListView.builder(
-                                                  itemCount: response.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return FluButton(
-                                                        onPressed: () async {
-                                                          if (response[index]
-                                                                  .type ==
-                                                              'bonne reponse') {
-                                                            scoreController
-                                                                .score += 5;
-                                                            controller.nextPage(
-                                                                duration:
-                                                                    Duration(
-                                                                        seconds:
-                                                                            1),
-                                                                curve: Curves
-                                                                    .easeIn);
-                                                            scoreController
-                                                                .reinit();
-
-                                                            if (controller
-                                                                    .page ==
-                                                                data.length -
-                                                                    1) {
-                                                              if (int.parse(
-                                                                      highScore) >=
-                                                                  scoreController
-                                                                      .score
-                                                                      .toInt()) {
-                                                                Get.defaultDialog(
-                                                                  title:
-                                                                      "Fin de partie",
-                                                                  middleText:
-                                                                      "Votre score est de ${scoreController.score}.",
-                                                                  actions: [
-                                                                    ElevatedButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        Get.offAll(() =>
-                                                                            BottomNavBar());
-                                                                      },
-                                                                      child: Text(
-                                                                          "OK"),
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              } else {
-                                                                await setScore(
-                                                                    scoreController
-                                                                        .score);
-                                                                Get.defaultDialog(
-                                                                  title:
-                                                                      "Meilleur score",
-                                                                  middleText:
-                                                                      "Votre score est de ${scoreController.score}.",
-                                                                  actions: [
-                                                                    ElevatedButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                        Get.offAll(() =>
-                                                                            BottomNavBar());
-                                                                      },
-                                                                      child: Text(
-                                                                          "OK"),
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              }
-                                                            }
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    const SnackBar(
-                                                              content: Text(
-                                                                  'Bonne Réponse !'),
-                                                              backgroundColor:
-                                                                  Colors.green,
-                                                            ));
-                                                          } else {
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    const SnackBar(
-                                                              content: Text(
-                                                                  'Mauvaise réponse x'),
-                                                              backgroundColor:
-                                                                  Colors.red,
-                                                            ));
-                                                            scoreController
-                                                                .reinit();
-
-                                                            if (controller
-                                                                    .page ==
-                                                                data.length -
-                                                                    1) {
-                                                              if (int.parse(
-                                                                      highScore) >=
-                                                                  scoreController
-                                                                      .score
-                                                                      .toInt()) {
-                                                                Get.defaultDialog(
-                                                                  title:
-                                                                      "Fin de partie",
-                                                                  middleText:
-                                                                      "Votre score est de ${scoreController.score}.",
-                                                                  actions: [
-                                                                    ElevatedButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                            Navigator.pop(
-                                                                            context);
-                                                                        Get.offAll(() =>
-                                                                            BottomNavBar());
-                                                                      },
-                                                                      child: Text(
-                                                                          "OK"),
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              } else {
-                                                                setScore(
-                                                                    scoreController
-                                                                        .score);
-                                                                Get.defaultDialog(
-                                                                  title:
-                                                                      "Meilleur score",
-                                                                  middleText:
-                                                                      "Votre score est de ${scoreController.score}.",
-                                                                  actions: [
-                                                                    ElevatedButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                      child: Text(
-                                                                          "OK"),
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              }
-                                                            }
-
-                                                            controller.nextPage(
-                                                                duration:
-                                                                    Duration(
-                                                                        seconds:
-                                                                            1),
-                                                                curve: Curves
-                                                                    .easeIn);
-                                                          }
-                                                        },
+                                          SizedBox(
+                                            width: screenWidth(context) * .8,
+                                            height: screenHeight(context) * .3,
+                                            child: FutureBuilder(
+                                                future: fetchResponses(
+                                                    data[index].id),
+                                                builder: (BuildContext context,
+                                                    AsyncSnapshot snapshot) {
+                                                  if (snapshot
+                                                          .connectionState ==
+                                                      ConnectionState.waiting) {
+                                                    return TiLoading();
+                                                  } else if (snapshot
+                                                      .hasError) {
+                                                    return Center(
+                                                      child: Text(
+                                                        'Oups response part ${snapshot.error}',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    List<ResponseModel>
+                                                        response =
+                                                        snapshot.data ?? [];
+                                                    if (response.length == 0) {
+                                                      return Center(
                                                         child: Text(
-                                                          response[index]
-                                                              .reponse,
+                                                          'Aucune réponse ajoutée pour cette question',
                                                           style: TextStyle(
                                                               color:
-                                                                  Colors.black),
-                                                        ));
-                                                  },
-                                                );
-                                              }
-                                            }),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              );
-                            });
+                                                                  Colors.white),
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      scoreController
+                                                          .increment();
+                                                      Timer.periodic(
+                                                          Duration(seconds: 10),
+                                                          (timer) {
+                                                        setState(() {
+                                                          show = true;
+                                                        });
+                                                      });
+
+                                                      // reinitSecond();
+                                                      /* Timer.periodic(
+                                                        Duration(seconds: 9),
+                                                        (timer) {
+                                                      setState(() {
+                                                        currentPage++;
+                                                      });
+                                                    }); */
+
+                                                      /* Timer.periodic(
+                                                        Duration(seconds: 10),
+                                                        (timer) {
+                                                      // scoreController.restartSecond();
+                                                      if (currentPage <
+                                                          data.length) {
+                                                        controller.nextPage(
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    200),
+                                                            curve:
+                                                                Curves.easeInOut);
+                                                      } else {
+                                                        controller.dispose();
+                                                      }
+                                                    }); */
+
+                                                      /* Timer.periodic(
+                                                        Duration(seconds: 10),
+                                                        (timer) {
+                                                      scoreController.increment();
+                          
+                                                      if (scoreController
+                                                              .seconds.value ==
+                                                          9) {
+                                                        print('\n\n change ');
+                                                      }
+                                                    }); */
+                                                      /* Timer.periodic(
+                                                        Duration(seconds: 10),
+                                                        (timer) async {
+                                                      if (currentPage <
+                                                          data.length - 1) {
+                                                        controller.nextPage(
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    500),
+                                                            curve: Curves.ease);
+                                                        currentPage++;
+                          
+                                                        // reinitSecond();
+                          
+                                                        // scoreController.reinit();
+                                                      } else if (currentPage ==
+                                                          data.length - 1) {
+                                                        /* _timer?.cancel();
+                                    Navigator.pop(context); */
+                                                        /* if (int.parse(
+                                                                highScore) >=
+                                                            scoreController.score
+                                                                .toInt()) {
+                                                          Get.defaultDialog(
+                                                            title:
+                                                                "Fin de partie",
+                                                            middleText:
+                                                                "Votre score est de ${scoreController.score}.",
+                                                            actions: [
+                                                              ElevatedButton(
+                                                                onPressed: () {
+                                                                  Get.back();
+                                                                  Get.offAll(() =>
+                                                                      BottomNavBar());
+                                                                },
+                                                                child: Text("OK"),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        } else {
+                                                          await setScore(
+                                                              scoreController
+                                                                  .score);
+                                                          Get.defaultDialog(
+                                                            title:
+                                                                "Meilleur score",
+                                                            middleText:
+                                                                "Votre score est de ${scoreController.score}.",
+                                                            actions: [
+                                                              ElevatedButton(
+                                                                onPressed: () {
+                                                                  Get.back();
+                                                                  Get.offAll(() =>
+                                                                      BottomNavBar());
+                                                                },
+                                                                child: Text("OK"),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        } */
+                                                      }
+                                                    }); */
+                                                    }
+
+                                                    return ListView.builder(
+                                                      itemCount:
+                                                          response.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return FluButton(
+                                                            backgroundColor: show ==
+                                                                    true
+                                                                ? response[index]
+                                                                            .type ==
+                                                                        'bonne reponse'
+                                                                    ? Colors
+                                                                        .green
+                                                                    : Colors.red
+                                                                : Colors.white,
+                                                            onPressed:
+                                                                () async {
+                                                              if (response[
+                                                                          index]
+                                                                      .type ==
+                                                                  'bonne reponse') {
+                                                                scoreController
+                                                                    .score += 5;
+                                                                controller.pageController.nextPage(
+                                                                    duration: Duration(
+                                                                        seconds:
+                                                                            1),
+                                                                    curve: Curves
+                                                                        .easeIn);
+                                                                scoreController
+                                                                    .reinit();
+
+                                                                if (controller.pageController
+                                                                        .page ==
+                                                                    data.length -
+                                                                        1) {
+                                                                  if (int.parse(
+                                                                          highScore) >=
+                                                                      scoreController
+                                                                          .score
+                                                                          .toInt()) {
+                                                                    Get.defaultDialog(
+                                                                      title:
+                                                                          "Fin de partie",
+                                                                      middleText:
+                                                                          "Votre score est de ${scoreController.score}.",
+                                                                      actions: [
+                                                                        ElevatedButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Get.offAll(() =>
+                                                                                BottomNavBar());
+                                                                          },
+                                                                          child:
+                                                                              Text("OK"),
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  } else {
+                                                                    await setScore(
+                                                                        scoreController
+                                                                            .score);
+                                                                    Get.defaultDialog(
+                                                                      title:
+                                                                          "Meilleur score",
+                                                                      middleText:
+                                                                          "Votre score est de ${scoreController.score}.",
+                                                                      actions: [
+                                                                        ElevatedButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                            Get.offAll(() =>
+                                                                                BottomNavBar());
+                                                                          },
+                                                                          child:
+                                                                              Text("OK"),
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  }
+                                                                }
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        const SnackBar(
+                                                                  content: Text(
+                                                                      'Bonne Réponse !'),
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .green,
+                                                                ));
+                                                              } else {
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        const SnackBar(
+                                                                  content: Text(
+                                                                      'Mauvaise réponse x'),
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .red,
+                                                                ));
+                                                                scoreController
+                                                                    .reinit();
+
+                                                                if (controller.pageController
+                                                                        .page ==
+                                                                    data.length -
+                                                                        1) {
+                                                                  if (int.parse(
+                                                                          highScore) >=
+                                                                      scoreController
+                                                                          .score
+                                                                          .toInt()) {
+                                                                    Get.defaultDialog(
+                                                                      title:
+                                                                          "Fin de partie",
+                                                                      middleText:
+                                                                          "Votre score est de ${scoreController.score}.",
+                                                                      actions: [
+                                                                        ElevatedButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                            Get.offAll(() =>
+                                                                                BottomNavBar());
+                                                                          },
+                                                                          child:
+                                                                              Text("OK"),
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  } else {
+                                                                    setScore(
+                                                                        scoreController
+                                                                            .score);
+                                                                    Get.defaultDialog(
+                                                                      title:
+                                                                          "Meilleur score",
+                                                                      middleText:
+                                                                          "Votre score est de ${scoreController.score}.",
+                                                                      actions: [
+                                                                        ElevatedButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                          },
+                                                                          child:
+                                                                              Text("OK"),
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  }
+                                                                }
+
+                                                                controller.pageController.nextPage(
+                                                                    duration: Duration(
+                                                                        seconds:
+                                                                            1),
+                                                                    curve: Curves
+                                                                        .easeIn);
+                                                              }
+                                                            },
+                                                            child: Text(
+                                                              response[index]
+                                                                  .reponse,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black),
+                                                            ));
+                                                      },
+                                                    );
+                                                  }
+                                                }),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              show == true
+                                                  ? FluButton(
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          show = false;
+                                                          currentPage++;
+                                                          controller.pageController.animateToPage(
+                                                              currentPage,
+                                                              duration: Duration(
+                                                                  milliseconds:
+                                                                      200),
+                                                              curve: Curves
+                                                                  .easeInOut);
+                                                        });
+                                                        /* controller.nextPage(
+                                                          duration: Duration(
+                                                              milliseconds: 200),
+                                                          curve:
+                                                              Curves.easeInOut); */
+                                                        /* scoreController
+                                                          .unShowResponse();
+                                                      scoreController.reinit();
+                                                      scoreController.increment(); */
+                                                      },
+                                                      padding:
+                                                          EdgeInsets.all(10),
+                                                      margin: EdgeInsets.only(
+                                                          bottom: 20),
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                              'Question Suivante'),
+                                                          FluIcon(FluIcons
+                                                              .arrowRight),
+                                                        ],
+                                                      ))
+                                                  : SizedBox()
+                                              /*  Obx(() => scoreController.show == true
+                                                ? FluButton(
+                                                    onPressed: () {
+                                                      controller.nextPage(
+                                                          duration: Duration(
+                                                              milliseconds: 200),
+                                                          curve:
+                                                              Curves.easeInOut);
+                                                      scoreController
+                                                          .unShowResponse();
+                                                      scoreController.reinit();
+                                                      scoreController.increment();
+                                                    },
+                                                    padding: EdgeInsets.all(10),
+                                                    margin: EdgeInsets.only(
+                                                        bottom: 20),
+                                                    child: Row(
+                                                      children: [
+                                                        Text('Question Suivante'),
+                                                        FluIcon(
+                                                            FluIcons.arrowRight),
+                                                      ],
+                                                    ))
+                                                : SizedBox()), */
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                          },
+                        );
                       }
                     },
                   ),
                 ),
               ),
+              /* Positioned(
+                  bottom: screenHeight(context) * .1,
+                  left: 10,
+                  child: Obx(() =>
+                      FluButton(onPressed: () {}, child: Text('Suivant')))), */
               Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: new LinearProgressBar(

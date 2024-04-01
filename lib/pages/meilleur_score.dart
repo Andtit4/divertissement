@@ -51,7 +51,7 @@ class _MeilleurScoreState extends State<MeilleurScore> {
                     ),
                   )),
               Positioned(
-                  top: screenHeight(context) * .6,
+                  top: screenHeight(context) * .45,
                   left: screenWidth(context) * .3,
                   child: Text(
                     'Meilleur score',
@@ -61,14 +61,31 @@ class _MeilleurScoreState extends State<MeilleurScore> {
                         fontSize: 24),
                   )),
               Positioned(
-                  top: screenHeight(context) * .65,
-                  left: screenWidth(context) * .45,
-                  child: Text(
-                    highScore.toString(),
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24),
+                  top: screenHeight(context) * .5,
+                  left: screenWidth(context) * .3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'John Doe - ',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24),
+                          ),
+                          Text(
+                            '0',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24),
+                          ),
+                        ],
+                      ),
+                    ],
                   ))
             ],
           ),

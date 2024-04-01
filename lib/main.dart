@@ -1,5 +1,7 @@
 import 'package:divertissement/screens/splaschscreen.dart';
 import 'package:divertissement/services/getCategories.dart';
+import 'package:divertissement/services/score_controller.dart';
+import 'package:divertissement/services/seconds.binding.dart';
 import 'package:divertissement/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      initialBinding: SecondBinding(),
       debugShowCheckedModeBanner: false,
       title: 'Divertissement',
       theme: ThemeData(
@@ -25,7 +28,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: GetBuilder<ScoreController>(
+        init: ScoreController(),
+        builder: (_) => MyHomePage(title: '',),
+      ),
     );
   }
 }
@@ -40,6 +46,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  ScoreController scoreController = Get.put(ScoreController());
 
   @override
   Widget build(BuildContext context) {

@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (prefs.getString('pseudo') != null) {
       Timer(const Duration(seconds: 4), () {
-        Get.offAll(() => const JouerScreen(),
+        Get.offAll(() => const BottomNavBar(),
             transition: Transition.leftToRightWithFade,
             duration: const Duration(seconds: 1));
       });

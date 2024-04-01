@@ -1,9 +1,9 @@
 import 'package:divertissement/pages/home.dart';
+import 'package:divertissement/pages/meilleur_score.dart';
 import 'package:divertissement/pages/settings.dart';
 import 'package:divertissement/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
-
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -49,7 +49,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
         },
         children: const [
           HomePage(),
-          SettingPage()
+          MeilleurScore(),
+          SettingPage(),
         ],
       ),
       bottomNavigationBar: SnakeNavigationBar.color(
@@ -57,7 +58,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         behaviour: snakeBarStyle,
         snakeShape: snakeShape,
         // shape: bottomBarShape,
-        
+
         snakeViewColor: Theme.of(context).brightness == Brightness.dark
             ? Colors.white
             : Colors.black,
@@ -78,12 +79,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
+              icon: Icon(Icons.numbers), label: 'Meilleur Scrore'),
+          BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: 'Activités'),
-         
         ],
         selectedLabelStyle: const TextStyle(fontSize: 14),
         unselectedLabelStyle: const TextStyle(fontSize: 10),
-        
       ),
     );
   }
