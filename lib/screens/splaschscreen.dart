@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:divertissement/pages/home.dart';
 import 'package:divertissement/pages/jouer.dart';
+import 'package:divertissement/pages/login.dart';
 import 'package:divertissement/pages/register.dart';
 import 'package:divertissement/partials/bottom_nav_bar.dart';
 import 'package:divertissement/partials/loading.dart';
@@ -29,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
       });
     } else {
       Timer(const Duration(seconds: 4), () {
-        Get.offAll(() => const RegisterPage(),
+        Get.offAll(() => const LoginPage(),
             transition: Transition.leftToRightWithFade,
             duration: const Duration(seconds: 1));
       });

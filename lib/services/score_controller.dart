@@ -35,8 +35,8 @@ class ScoreController extends GetxController {
       if (_timerValue % 10 == 0) {
         _currentPage = (_currentPage + 1) % 6;
         _timerValue = 0;
-        _pageController.animateToPage(_currentPage,
-            duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+        /* _pageController.animateToPage(_currentPage,
+            duration: Duration(milliseconds: 300), curve: Curves.easeInOut); */
         update();
       }
     });
@@ -57,6 +57,10 @@ class ScoreController extends GetxController {
 
   void unShowResponse() {
     show.value = false;
+  }
+
+  void incrementPageindex() {
+    currentPageIndex.value++;
   }
 
   void increment() async {
@@ -104,6 +108,4 @@ class ScoreController extends GetxController {
     seconds.value = 0;
     print('\n\n Restart increment ${seconds.value}');
   }
-
-
 }

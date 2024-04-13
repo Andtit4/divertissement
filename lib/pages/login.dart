@@ -1,5 +1,5 @@
 import 'package:divertissement/pages/home.dart';
-import 'package:divertissement/pages/login.dart';
+import 'package:divertissement/pages/register.dart';
 import 'package:divertissement/partials/bottom_nav_bar.dart';
 import 'package:divertissement/partials/input.dart';
 import 'package:divertissement/services/local.dart';
@@ -8,16 +8,14 @@ import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  TextEditingController pseudoController = TextEditingController();
-  TextEditingController nomController = TextEditingController();
+class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController mdpController = TextEditingController();
 
@@ -42,7 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       bottomRight: Radius.circular(25))),
               child: Center(
                 child: Text(
-                  'CREEZ VOTRE\nCOMPTE',
+                  'VEILLEZ VOUS\nCONNECTER',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -55,7 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             Container(
               width: double.infinity,
-              height: screenHeight(context) * .7,
+              height: screenHeight(context) * .58,
               padding: EdgeInsets.all(15),
               decoration: BoxDecoration(
                   // color: Color.fromARGB(255, 22, 48, 79),
@@ -71,30 +69,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     color: Colors.white,
                     readonly: false,
                     width: screenWidth(context),
-                    inputController: pseudoController,
-                    hintText: 'Entrer votre pseudo',
-                    hintColor: Colors.grey,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  TiInput(
-                    color: Colors.white,
-                    readonly: false,
-                    width: screenWidth(context),
-                    hintText: 'Entrer votre nom',
-                    inputController: nomController,
-                    hintColor: Colors.grey,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  TiInput(
-                    color: Colors.white,
-                    readonly: false,
-                    width: screenWidth(context),
-                    hintText: 'Entrer votre email',
                     inputController: emailController,
+                    hintText: 'Entrer votre email',
                     hintColor: Colors.grey,
                   ),
                   SizedBox(
@@ -111,31 +87,34 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(
                     height: 15,
                   ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   FluButton(
                       onPressed: () {
-                        if (pseudoController.text == '' ||
-                            nomController.text == '' ||
-                            emailController.text == '') {
+                        if (emailController.text == '' ||
+                            mdpController.text == '') {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                             content: Text('Veillez remplir tous les champs !'),
                             backgroundColor: Colors.red,
                           ));
-                        } else if (pseudoController.text == ' ' ||
-                            nomController.text == ' ' ||
-                            emailController.text == ' ') {
+                        } else if (emailController.text == ' ' ||
+                            mdpController.text == ' ') {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                             content: Text('Veillez remplir tous les champs !'),
                             backgroundColor: Colors.red,
                           ));
                         } else {
-                          createAccount(
-                              nomController.text,
-                              pseudoController.text,
-                              emailController.text,
-                              mdpController.text,
-                              '0');
+                          getAuth(emailController.text, mdpController.text);
+                          /* register(pseudoController.text, nomController.text,
+                              prenomController.text, '0');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Bienvenu')));
+                          Get.offAll(() => BottomNavBar(),
+                              transition: Transition.leftToRight,
+                              duration: const Duration(seconds: 3)); */
                         }
                       },
                       child: Container(
@@ -153,19 +132,16 @@ class _RegisterPageState extends State<RegisterPage> {
                               fontSize: 18),
                         )),
                       )),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            Get.offAll(() => LoginPage(),
-                                transition: Transition.leftToRight,
-                                duration: const Duration(seconds: 3));
-                          },
-                          child: Text(
-                              'Déjà un compte ? Veillez vous connecter ici'))
-                    ],
-                  )
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(onPressed: (){
+                            Get.offAll(() => RegisterPage(),
+                              transition: Transition.leftToRight,
+                              duration: const Duration(seconds: 3));
+                          }, child: Text('Pas de compte ? Veillez créer ici'))
+                        ],
+                      )
                 ],
               ),
             )
