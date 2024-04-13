@@ -72,7 +72,7 @@ class _QuizzState extends State<Quizz> {
 
   fetchResponses(id_question) async {
     String apiLink =
-        link('getReponseByQuestion.php?id_question=$id_question', '');
+        link('reponse/search?id_question=$id_question', '');
     final response = await http.get(Uri.parse(apiLink));
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);

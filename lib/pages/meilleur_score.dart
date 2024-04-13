@@ -1,3 +1,5 @@
+import 'package:divertissement/model/user_model.dart';
+import 'package:divertissement/services/local.dart';
 import 'package:divertissement/utils/constants.dart';
 import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
@@ -11,19 +13,10 @@ class MeilleurScore extends StatefulWidget {
 }
 
 class _MeilleurScoreState extends State<MeilleurScore> {
-  String highScore = '';
-  setScore() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      highScore = prefs.getString('score').toString();
-    });
-  }
-
   @override
   void initState() {
-    // TODO: implement initState
+    getHighScore();
     super.initState();
-    setScore();
   }
 
   @override
@@ -61,31 +54,50 @@ class _MeilleurScoreState extends State<MeilleurScore> {
                         fontSize: 24),
                   )),
               Positioned(
-                  top: screenHeight(context) * .5,
+                  top: screenHeight(context) * .45,
                   left: screenWidth(context) * .3,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'John Doe - ',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24),
-                          ),
-                          Text(
-                            '0',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24),
-                          ),
-                        ],
-                      ),
-                    ],
+                  child: SizedBox(
+                    width: screenWidth(context),
+                    height: screenHeight(context) * .3,
+                    child: FutureBuilder(
+                      future: getHighScore(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting)
+                          return SizedBox(
+                            width: screenWidth(context),
+                            height: screenHeight(context) * .1,
+                            child: Center(child: CircularProgressIndicator(color: Colors.transparent,)));
+                        else if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              'An error occured ${snapshot.error}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          );
+                        } else {
+                          List<UserModel> data = snapshot.data ?? [];
+                          return ListView.builder(
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      data[index].pseudo,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    Text(
+                                      ' - ${data[index].score} points',
+                                      style: TextStyle(color: Colors.white),
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      },
+                    ),
                   ))
             ],
           ),

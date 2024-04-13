@@ -79,7 +79,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.numbers), label: 'Meilleur Scrore'),
+              icon: Icon(Icons.score), label: 'Meilleur Scrore'),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: 'Activités'),
         ],

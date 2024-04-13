@@ -46,7 +46,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  ScoreController scoreController = Get.put(ScoreController());
+  // ScoreController scoreController = Get.put(ScoreController());
 
   @override
   Widget build(BuildContext context) {
