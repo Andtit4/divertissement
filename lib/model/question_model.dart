@@ -8,7 +8,7 @@ class QuestionModel {
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
     return QuestionModel(
-        id: json['id'],
+        id: json['_id'],
         question: json['question'],
         categorie: json['categorie']);
   }

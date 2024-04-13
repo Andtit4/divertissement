@@ -54,7 +54,9 @@ class _QuizzState extends State<Quizz> {
   }
 
   fetchCinemaData() async {
-    final response = await http.post(Uri.parse(widget.link));
+    final response = await http.get(Uri.parse(widget.link));
+      print('Link: ${widget.link}');
+
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);
       print('Link: ${widget.link}');
@@ -66,7 +68,7 @@ class _QuizzState extends State<Quizz> {
       /*   Map<String, dynamic> cinemaData = json.decode(response.body);
       questions = cinemaData['results']; */
     } else {
-      throw Exception('Erreur de chargement des données de la question');
+      throw Exception('Erreur de chargement des données de la question ${response.statusCode}');
     }
   }
 
@@ -97,9 +99,9 @@ class _QuizzState extends State<Quizz> {
     fetchCinemaData();
     getScore();
 
-    Future.delayed(Duration.zero).then((value) {
+/*     Future.delayed(Duration.zero).then((value) {
       Provider.of(context, listen: false).callMethod();
-    });
+    }); */
     // _startTimer();
     // scoreController.increment();
     // reinitSecond();

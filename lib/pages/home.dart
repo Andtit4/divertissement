@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                                 duration: Duration(seconds: 2)); */
                                 Get.to(
                                 () => Quizz(
-                                    link: link('getQuestionByCategory.php?categorie=CINEMA', '')
+                                    link: link('question/search?categorie=CINEMA', '')
                                         /* "http://192.168.100.156/quizz/api/getQuestionByCategory.php?categorie=SPORT" */),
                                 transition: Transition.rightToLeft,
                                 duration: Duration(seconds: 2));
@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Get.to(
                                 () => Quizz(
-                                    link: link('getQuestionByCategory.php?categorie=MUSIQUE', '')
+                                    link: link('question/search?categorie=MUSIQUE', '')
                                         /* "http://192.168.100.156/quizz/api/getQuestionByCategory.php?categorie=SPORT" */),
                                 transition: Transition.rightToLeft,
                                 duration: Duration(seconds: 2));
@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                           
                             Get.to(
                                 () => Quizz(
-                                    link: link('getQuestionByCategory.php?categorie=SPORT', '')
+                                    link: link('question/search?categorie=SPORT', '')
                                         /* "http://192.168.100.156/quizz/api/getQuestionByCategory.php?categorie=SPORT" */),
                                 transition: Transition.rightToLeft,
                                 duration: Duration(seconds: 2));
