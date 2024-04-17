@@ -80,15 +80,18 @@ class _MeilleurScoreState extends State<MeilleurScore> {
                             itemCount: data.length,
                             itemBuilder: (context, index) {
                               return Container(
+                                margin: EdgeInsets.only(bottom: 10),
                                 child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       data[index].pseudo,
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: Colors.white, fontSize: 18),
                                     ),
+                                    SizedBox(width: screenWidth(context) * .05,),
                                     Text(
-                                      ' - ${data[index].score} points',
-                                      style: TextStyle(color: Colors.white),
+                                      '  ${data[index].score} points',
+                                      style: TextStyle(color: Colors.white, fontSize: 18),
                                     )
                                   ],
                                 ),

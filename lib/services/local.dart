@@ -22,6 +22,11 @@ register(pseudo, nom, prenom, score) async {
   prefs.setString('score', score);
 }
 
+logout() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.remove('pseudo');
+}
+
 getHighScore() async {
   String apiLink = link('user/high', '');
   var response = await http.get(Uri.parse(apiLink));

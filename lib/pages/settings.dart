@@ -1,6 +1,10 @@
+import 'package:divertissement/pages/login.dart';
+import 'package:divertissement/services/local.dart';
 import 'package:divertissement/utils/constants.dart';
 import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -37,13 +41,13 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     )),
                 Positioned(
-                  top: screenHeight(context) * .6,
-                  right: 10,
+                    top: screenHeight(context) * .6,
+                    right: 10,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
+                      children: [
+                        /*  Text(
                       'Profil',
                       style: TextStyle(
                           color: Colors.amber,
@@ -70,9 +74,29 @@ class _SettingPageState extends State<SettingPage> {
                           color: Colors.amber,
                           fontSize: 30,
                           fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ))
+                    ), */
+                        Text(
+                          'Politique',
+                          style: TextStyle(
+                              color: Colors.amber,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            logout();
+                            Get.offAll(() => LoginPage());
+                          },
+                          child: Text(
+                            'Deconnexion',
+                            style: TextStyle(
+                                color: Colors.amber,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ))
               ],
             ),
           )

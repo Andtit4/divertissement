@@ -1,4 +1,4 @@
-package com.example.divertissement
+package com.divertissement.vertus
 
 import io.flutter.embedding.android.FlutterActivity
 

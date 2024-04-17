@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(25)),
                         child: Center(
                             child: Text(
-                          'Créer votre compte',
+                          'Connexion',
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
